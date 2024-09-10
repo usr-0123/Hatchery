@@ -8,7 +8,7 @@ import AuthRoutes from './pages/auth/AuthRoutes';
 function App() {
 
   return (
-    <div>
+    <div >
       <Routes>
         <Route path='/*' element={<AuthRoutes />} />
         <Route path='/dashboard/*' element={<Dashboard />} />

@@ -1,35 +1,26 @@
 import React, { useState } from "react";
 import { Button, Layout, Menu, theme } from "antd";
+import { LogoutOutlined, MenuFoldOutlined, MenuOutlined, UserOutlined } from '@ant-design/icons';
+import { adminSideBarItems } from "../components/SidebarItems";
+import { useNavigate } from "react-router-dom";
+
 const { Header, Content, Sider } = Layout;
-import type { MenuProps } from 'antd';
-import { LogoutOutlined, MenuFoldOutlined, MenuOutlined, UserOutlined, LaptopOutlined, NotificationOutlined } from '@ant-design/icons';
-
-const items2: MenuProps['items'] = [UserOutlined, LaptopOutlined, NotificationOutlined].map(
-    (icon, index) => {
-        const key = String(index + 1);
-
-        return {
-            key: `sub${key}`,
-            icon: React.createElement(icon),
-            label: `subnav ${key}`,
-
-            children: new Array(4).fill(null).map((_, j) => {
-                const subKey = index * 4 + j + 1;
-                return {
-                    key: subKey,
-                    label: `option${subKey}`,
-                };
-            }),
-        };
-    },
-);
 
 const Dashboard: React.FC = () => {
     const [isCollapsed, setIsCollapsed] = useState(false);
     const { token: { colorBgContainer, borderRadiusLG } } = theme.useToken();
+    const navigate = useNavigate();
+
+    const handleMenuClick = (item: any) => {
+        console.log(item.item.props.path);
+
+        if (item.item.props.path) {
+            navigate(item.item.props.path);
+        };
+    };
 
     return (
-        <Layout>
+        <Layout style={{ minHeight: '97vh' }} >
             <Header
                 style={{
                     display: 'flex',
@@ -75,10 +66,11 @@ const Dashboard: React.FC = () => {
                         </div>
                         <Menu
                             mode="inline"
-                            defaultSelectedKeys={['1']}
-                            defaultOpenKeys={['sub1']}
+                            defaultSelectedKeys={['adminHome']}
+                            defaultOpenKeys={['adminHome']}
                             style={{ height: '100%', borderRight: 0 }}
-                            items={items2}
+                            items={adminSideBarItems}
+                            onClick={(e) => handleMenuClick(e as any)}
                         />
                     </Sider>
                     <Layout>
@@ -86,7 +78,7 @@ const Dashboard: React.FC = () => {
                             style={{
                                 padding: 24,
                                 margin: 0,
-                                minHeight: 280,
+                                minHeight: '100%',
                                 background: colorBgContainer,
                                 borderRadius: borderRadiusLG,
                             }}
