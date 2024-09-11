@@ -28,7 +28,7 @@ export const registerUserService = async (user) => {
 };
 
 export const fetchUsersService = async (params) => {
-    
+
     let query;
 
     if (!params) {
@@ -55,12 +55,12 @@ export const fetchUsersService = async (params) => {
                 case params.userPassword:
                     query = fetchAllUsersDetailsQuery + ` WHERE userEmail = '${params.userEmail}'`;
                     break;
-                    default:
+                default:
                     query = fetchUsersQuery + ` WHERE userEmail = '${params.userEmail}'`;
             };
         };
 
-        
+
 
         if (params.userName) {
             switch (params.userName) {
@@ -91,8 +91,8 @@ export const fetchUsersService = async (params) => {
     };
 };
 
-export const updateUserService = async ({userId}, params) => {
-    
+export const updateUserService = async ({ userId }, params) => {
+
     let query = updateUserQuery(userId, params)
 
     try {
@@ -103,14 +103,14 @@ export const updateUserService = async ({userId}, params) => {
     }
 };
 
-export const deleteUserService = async ({userId}) => {
-    
-    let query = deleteUserQuery(userId)
+export const deleteUserService = async ({ userId }) => {
+
+    let query = deleteUserQuery(userId);
 
     try {
-        const result = await poolrequest().query(query)
-        return result
+        const result = await poolrequest().query(query);
+        return result;
     } catch (error) {
-        return error
-    }
-}
+        return error;
+    };
+};

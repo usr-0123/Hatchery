@@ -1,13 +1,5 @@
--- We have farmers and hatchery cooperative society
--- The coop society has staff and admins
--- The admins are the ones that access the data and info
-
--- Users
--- - Farmers as User
--- - Employees/Staff
--- - Admin
-
-CREATE TABLE tbl_Users (
+CREATE TABLE tbl_Users
+(
     userId VARCHAR(255) PRIMARY KEY,
     userRole VARCHAR(10) DEFAULT 'User',
     firstName VARCHAR(255),
@@ -22,10 +14,75 @@ CREATE TABLE tbl_Users (
     membershipDate Date
 );
 
-select * from tbl_Users;
+CREATE TABLE tbl_batches
+(
+    batchId VARCHAR(255) PRIMARY KEY,
+    userId VARCHAR(255),
+    receivedDate DATE,
+    totalEggs INT, -- Total eggs received in the batch
+    batchStatus VARCHAR(255) -- incubation, hatched, sold
+);
 
-INSERT INTO tbl_Users
-VALUES (@userId,@userRole,@firstName,@lastName,@surName,@userName,@userEmail,@userPassword,@userPhoneNumber,@userStreet,@userLocation,@membershipDate)
+CREATE TABLE tbl_eggs
+(
+    eggId VARCHAR(255) PRIMARY KEY,
+    userId VARCHAR(255),
+    batchId VARCHAR(255),
+    collectionDate DATE,
+    eggsQuantity INT
+);
+
+CREATE TABLE tbl_incubation
+(
+    incubationId VARCHAR(255) PRIMARY KEY,
+    batchId VARCHAR(255),
+    startDate DATE,
+    hatchDate DATE,
+    IncubationState VARCHAR(255) -- Options are ongoing (default) or completed.
+);
+
+
+CREATE TABLE tbl_Hatchrecords
+(
+    hatchRecordId VARCHAR(255) PRIMARY KEY,
+    batchId VARCHAR(255),
+    hatchedChicks INT,
+    unHatchedEggs INT,
+    dateHatched DATE
+);
+
+
+CREATE TABLE tbl_Chicks
+(
+    chickId VARCHAR(255) PRIMARY KEY,
+    batchId VARCHAR(255),
+    hatchRecordId VARCHAR(255),
+    chickType VARCHAR(255), -- Broiler or layer
+    quantity INT,
+    healthStatus VARCHAR(255) -- Healthy or unhealthy
+);
+
+
+CREATE TABLE tbl_sales
+(
+    saleId VARCHAR(255),
+    batchId VARCHAR(255),
+    chickId VARCHAR(255),
+    saleDate DATE,
+    quantitySold INT,
+    chickPrice DECIMAL(10, 2),
+    totalAmount DECIMAL(10, 2)
+);
+
+-- We have farmers and hatchery cooperative society
+-- The coop society has staff and admins
+-- The admins are the ones that access the data and info
+
+-- Users
+-- - Farmers as User
+-- - Employees/Staff
+-- - Admin
+
 
 -- Report
 -- - Inputs checking the eggs bought vs the hatched. Losses refers to spoilt eggs
