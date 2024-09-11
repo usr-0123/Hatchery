@@ -62,7 +62,7 @@ export const updateincubationService = async ({ incubationId }, params) => {
     };
 };
 
-export const deleteEggService = async ({ incubationId }) => {
+export const deleteIncubationService = async ({ incubationId }) => {
     let query = deleteIncubationsQuery + `WHERE incubationId = '${incubationId}'`;
 
     try {

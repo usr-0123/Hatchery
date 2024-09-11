@@ -1,7 +1,7 @@
 import { createNewChickQuery, deleteChicksQuery, fetchChicksQuery, updateChicksQuery } from "../sql/chicksQueries.js";
 import { poolrequest, sql } from "../utilis/connect.js";
 
-export const createNewHatchRecordService = async (params) => {
+export const createNewChickService = async (params) => {
 
     try {
         const result = await poolrequest()
@@ -20,7 +20,7 @@ export const createNewHatchRecordService = async (params) => {
     };
 };
 
-export const fetchChicksQueryService = async (params) => {
+export const fetchChicksService = async (params) => {
     let query;
 
     if (!query) {
