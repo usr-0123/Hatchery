@@ -20,7 +20,7 @@ export const createNewIncubationService = async (params) => {
 export const fetchIncubationsService = async (params) => {
     let query;
 
-    if (!query) {
+    if (!params) {
         query = fetchIncubationsQuery;
     } else {
         if (params.incubationId) {

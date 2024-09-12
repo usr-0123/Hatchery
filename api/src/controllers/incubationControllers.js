@@ -1,7 +1,7 @@
 import { v4 } from "uuid";
 import { conflict, dataFound, sendBadRequest, sendCreated, sendDeleteSuccess, sendNotFound, sendServerError, unAuthorized } from "../helpers/httpStatusCodes.js";
 import { fetchUsersService } from "../services/usersServices.js";
-import { deleteIncubationService, fetchIncubationsService, updateincubationService } from "../services/incubationService.js";
+import { createNewIncubationService, deleteIncubationService, fetchIncubationsService, updateincubationService } from "../services/incubationService.js";
 
 export const createNewIncubationController = async (req, res) => {
 
@@ -18,7 +18,7 @@ export const createNewIncubationController = async (req, res) => {
 
         const incubationId = v4();
 
-        const incubation = { incubationId, batchId, startDate, hatchDate, IncubationState };
+        const incubation = { incubationId, batchId, startDate, hatchDate, IncubationState: IncubationState ? IncubationState : 'Ongoing' };
 
         const result = await createNewIncubationService(incubation);
 
@@ -85,7 +85,9 @@ export const updateincubationController = async (req, res) => {
 
     const editor = await fetchUsersService({ userId: req.params.editorId });
 
-    if (editor.recordset && editor.recordset.length > 0 && editor.recordset.userRole === 'Admin') {
+    if (editor?.recordset?.length > 0 && req.params.editorId === editor.recordset[0].userId) {
+        permission = true;
+    } else if (editor?.recordset?.length > 0 && editor.recordset[0].userRole === 'Admin') {
         permission = true;
     };
 
@@ -121,7 +123,10 @@ export const deleteIncubationController = async (req, res) => {
     let permission = false;
 
     const editor = await fetchUsersService({ userId: req.params.editorId });
-    if (editor.recordset && editor.recordset.length > 0 && editor.recordset.userRole === 'Admin') {
+
+    if (editor?.recordset?.length > 0 && req.params.editorId === editor?.recordset[0].userId) {
+        permission = true;
+    } else if (editor?.recordset?.length > 0 && editor?.recordset[0].userRole === 'Admin') {
         permission = true;
     };
 

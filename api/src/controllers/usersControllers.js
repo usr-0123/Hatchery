@@ -39,9 +39,9 @@ export const registerUserController = async (req, res) => {
                     userId,
                     firstName: formatNameCase(firstName),
                     lastName: formatNameCase(lastName),
-                    surName: formatNameCase(surName),
-                    userName: userName.toLowerCase(),
-                    userEmail: userEmail.toLowerCase(),
+                    surName: surName? formatNameCase(surName) : null,
+                    userName: userName?.toLowerCase(),
+                    userEmail: userEmail?.toLowerCase(),
                     userPassword: hashedUserPassword,
                     userPhoneNumber,
                     userStreet,
@@ -82,6 +82,7 @@ export const loginUserController = async (req, res) => {
         if (user && user.recordset.length < 1) {
             return sendNotFound(res, 'No user found with the details provided.')
         } else {
+            
             const valid = await bcrypt.compare(req.body.userPassword, user.recordset[0].userPassword);
 
             if (valid) {
@@ -279,7 +280,7 @@ export const updateUserDetailsController = async (req, res) => {
         permission = true;
     } else {
         const editor = await fetchUsersService({ userId: req.params.editorId });
-        if (editor.recordset && editor.recordset.length > 0 && editor.recordset.userRole === 'Admin') {
+        if (editor?.recordset?.length > 0 && editor.recordset[0].userRole === 'Admin') {
             permission = true;
         };
     };

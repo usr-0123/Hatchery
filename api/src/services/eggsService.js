@@ -20,13 +20,14 @@ export const createNewEggService = async (egg) => {
 
 export const fetchEggsService = async (params) => {
     let query;
-
-    if (!query) {
+    
+    if (!params) {
         query = fetchEggsQuery;
     } else {
         if (params.eggId) {
             query = fetchEggsQuery + `WHERE eggId = '${params.eggId}'`;
         };
+        
         if (params.batchId) {
             query = fetchEggsQuery + `WHERE batchId = '${params.batchId}'`;
         };
@@ -34,7 +35,7 @@ export const fetchEggsService = async (params) => {
         if (params.userId) {
             query = fetchEggsQuery + `WHERE userId = '${params.userId}'`;
         };
-
+        
         if (params.collectionDate) {
             query = fetchEggsQuery + `WHERE collectionDate = '${params.collectionDate}'`;
         };

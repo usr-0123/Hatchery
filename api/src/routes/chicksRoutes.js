@@ -11,7 +11,7 @@ chickRoutes.get('/chicks/fetch/batchId/:batchId', verifyTokenMiddleware, fetchCh
 chickRoutes.get('/chicks/fetch/hatchRecordId/:hatchRecordId', verifyTokenMiddleware, fetchChickController )
 chickRoutes.get('/chicks/fetch/chickType/:chickType', verifyTokenMiddleware, fetchChickController )
 chickRoutes.get('/chicks/fetch/healthStatus/:healthStatus', verifyTokenMiddleware, fetchChickController )
-chickRoutes.patch('/chicks/update/:chickId', verifyTokenMiddleware, updateChicksController)
-chickRoutes.delete('/chicks/delete/:chickId', verifyTokenMiddleware, deleteChickController)
+chickRoutes.patch('/chicks/update/:editorId/:chickId', verifyTokenMiddleware, updateChicksController)
+chickRoutes.delete('/chicks/delete/:editorId/:chickId', verifyTokenMiddleware, deleteChickController)
 
 export default chickRoutes;

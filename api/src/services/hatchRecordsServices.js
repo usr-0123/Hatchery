@@ -21,7 +21,7 @@ export const createNewHatchRecordService = async (params) => {
 export const fetchHatchRecordsService = async (params) => {
     let query;
 
-    if (!query) {
+    if (!params) {
         query = fetchHatchRecordsQuery;
     } else {
         if (params.hatchRecordId) {

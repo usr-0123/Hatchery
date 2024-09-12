@@ -10,7 +10,7 @@ export const createNewChickService = async (params) => {
             .input('hatchRecordId', sql.VarChar, params.hatchRecordId)
             .input('chickType', sql.VarChar, params.chickType)
             .input('quantity', sql.Int, params.quantity)
-            .input('healthStatus', sql.Int, params.healthStatus)
+            .input('healthStatus', sql.VarChar, params.healthStatus)
 
             .query(createNewChickQuery);
 

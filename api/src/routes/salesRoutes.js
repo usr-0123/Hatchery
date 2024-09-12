@@ -10,7 +10,7 @@ salesRoutes.get('/sales/fetch/saleId/:saleId', verifyTokenMiddleware, fetchSaleC
 salesRoutes.get('/sales/fetch/batchId/:batchId', verifyTokenMiddleware, fetchSaleController)
 salesRoutes.get('/sales/fetch/chickId/:chickId', verifyTokenMiddleware, fetchSaleController)
 salesRoutes.get('/sales/fetch/saleDate/:saleDate', verifyTokenMiddleware, fetchSaleController)
-salesRoutes.patch('/sales/update/:saleId', verifyTokenMiddleware, updateSalesController)
-salesRoutes.delete('/sales/delete/:saleId', verifyTokenMiddleware, deleteSalesController)
+salesRoutes.patch('/sales/update/:editorId/:saleId', verifyTokenMiddleware, updateSalesController)
+salesRoutes.delete('/sales/delete/:editorId/:saleId', verifyTokenMiddleware, deleteSalesController)
 
 export default salesRoutes;

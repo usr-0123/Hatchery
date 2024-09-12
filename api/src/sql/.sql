@@ -14,32 +14,55 @@ CREATE TABLE tbl_Users
     membershipDate Date
 );
 
-CREATE TABLE tbl_batches
+SELECT * from tbl_Users
+
+drop table tbl_Users;
+
+CREATE TABLE tbl_Batches
 (
     batchId VARCHAR(255) PRIMARY KEY,
     userId VARCHAR(255),
     receivedDate DATE,
     totalEggs INT, -- Total eggs received in the batch
-    batchStatus VARCHAR(255) -- incubation, hatched, sold
+    batchStatus VARCHAR(255), -- incubation, hatched, sold
+    FOREIGN KEY (userId) REFERENCES tbl_Users(userId)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE 
 );
 
-CREATE TABLE tbl_eggs
+drop table tbl_batches
+
+select * from tbl_Batches
+select * from tbl_batches
+
+CREATE TABLE tbl_Eggs
 (
     eggId VARCHAR(255) PRIMARY KEY,
     userId VARCHAR(255),
     batchId VARCHAR(255),
     collectionDate DATE,
-    eggsQuantity INT
+    eggsQuantity INT,
+    FOREIGN KEY (batchId) REFERENCES tbl_Batches(batchId)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE,
+    FOREIGN KEY (userId) REFERENCES tbl_Users(userId)
 );
 
-CREATE TABLE tbl_incubation
+drop table tbl_Eggs
+
+CREATE TABLE tbl_Incubation
 (
     incubationId VARCHAR(255) PRIMARY KEY,
     batchId VARCHAR(255),
     startDate DATE,
     hatchDate DATE,
-    IncubationState VARCHAR(255) -- Options are ongoing (default) or completed.
+    IncubationState VARCHAR(255), -- Options are ongoing (default) or completed.
+    FOREIGN KEY (batchId) REFERENCES tbl_Batches(batchId)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE 
 );
+
+drop table tbl_incubation
 
 
 CREATE TABLE tbl_Hatchrecords
@@ -48,8 +71,13 @@ CREATE TABLE tbl_Hatchrecords
     batchId VARCHAR(255),
     hatchedChicks INT,
     unHatchedEggs INT,
-    dateHatched DATE
+    dateHatched DATE,
+    FOREIGN KEY (batchId) REFERENCES tbl_Batches(batchId)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE 
 );
+
+drop table tbl_Hatchrecords;
 
 
 CREATE TABLE tbl_Chicks
@@ -59,11 +87,16 @@ CREATE TABLE tbl_Chicks
     hatchRecordId VARCHAR(255),
     chickType VARCHAR(255), -- Broiler or layer
     quantity INT,
-    healthStatus VARCHAR(255) -- Healthy or unhealthy
+    healthStatus VARCHAR(255), -- Healthy or unhealthy
+    FOREIGN KEY (batchId) REFERENCES tbl_Batches(batchId)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE 
 );
 
+drop table tbl_Chicks;
 
-CREATE TABLE tbl_sales
+
+CREATE TABLE tbl_Sales
 (
     saleId VARCHAR(255),
     batchId VARCHAR(255),
@@ -71,8 +104,14 @@ CREATE TABLE tbl_sales
     saleDate DATE,
     quantitySold INT,
     chickPrice DECIMAL(10, 2),
-    totalAmount DECIMAL(10, 2)
+    totalAmount DECIMAL(10, 2),
+    FOREIGN KEY (chickId) REFERENCES tbl_Chicks(chickId),
+    FOREIGN KEY (batchId) REFERENCES tbl_Batches(batchId)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE
 );
+
+drop table tbl_sales;
 
 -- We have farmers and hatchery cooperative society
 -- The coop society has staff and admins

@@ -8,7 +8,7 @@ export const createNewEggController = async (req, res) => {
     try {
         const { userId, batchId, collectionDate, eggsQuantity } = req.body;
 
-        const eggExists = await fetchChicksService();
+        const eggExists = await fetchEggsService();
 
         const exactEgg = eggExists.recordset.length > 0 && eggExists.recordset.filter(object => object.batchId === batchId && object.userId === userId && object.collectionDate === collectionDate && object.eggsQuantity === eggsQuantity);
 
@@ -65,6 +65,7 @@ export const fetchEggsController = async (req, res) => {
 };
 
 export const fetchEggController = async (req, res) => {
+
     try {
         const result = await fetchEggsService(req.params);
 
@@ -91,7 +92,9 @@ export const updateEggController = async (req, res) => {
 
     const editor = await fetchUsersService({ userId: req.params.editorId });
 
-    if (editor.recordset && editor.recordset.length > 0 && editor.recordset.userRole === 'Admin') {
+    if (editor?.recordset?.length > 0 && req.params.editorId === editor?.recordset[0].userId) {
+        permission = true;
+    } else if (editor?.recordset?.length > 0 && editor?.recordset[0].userRole === 'Admin') {
         permission = true;
     };
 
@@ -127,7 +130,10 @@ export const deleteEggController = async (req, res) => {
     let permission = false;
 
     const editor = await fetchUsersService({ userId: req.params.editorId });
-    if (editor.recordset && editor.recordset.length > 0 && editor.recordset.userRole === 'Admin') {
+
+    if (editor?.recordset?.length > 0 && req.params.editorId === editor.recordset[0].userId) {
+        permission = true;
+    } else if (editor?.recordset?.length > 0 && editor.recordset[0].userRole === 'Admin') {
         permission = true;
     };
 

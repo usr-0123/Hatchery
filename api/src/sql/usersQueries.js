@@ -15,3 +15,40 @@ export const deleteUserQuery = (userId) => {
     const query = `DELETE FROM tbl_Users WHERE userId = '${userId}'`
     return query;
 };
+
+`CREATE PROCEDURE DeleteUserAndUpdateReferences
+    @userId VARCHAR(255)
+AS
+BEGIN
+    -- Start a transaction to ensure atomicity
+    BEGIN TRANSACTION;
+
+    BEGIN TRY
+        -- Update references in tbl_batches
+        UPDATE tbl_batches
+        SET userId = NULL
+        WHERE userId = @userId;
+
+        -- Update references in tbl_eggs
+        UPDATE tbl_eggs
+        SET userId = NULL
+        WHERE userId = @userId;
+
+        -- Update references in tbl_Users if any other tables have foreign key constraints
+        -- Here we assume no other tables have userId foreign key constraints that need to be updated
+
+        -- Delete the user entry from tbl_Users
+        DELETE FROM tbl_Users
+        WHERE userId = @userId;
+
+        -- Commit the transaction if all operations succeed
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        -- Rollback the transaction if any error occurs
+        ROLLBACK TRANSACTION;
+
+        -- Optionally, raise an error message
+        THROW;
+    END CATCH;
+END;`

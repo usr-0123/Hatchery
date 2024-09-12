@@ -6,7 +6,7 @@ import { createNewSaleService, deleteSalesService, fetchSalesService, updateSale
 export const createNewSaleController = async (req, res) => {
 
     try {
-        const { batchId, chickId, saleDate, quantitySold, chickPrice, totalAmount } = req.body;
+        const { batchId, chickId, saleDate, quantitySold, chickPrice } = req.body;
 
         const saleExists = await fetchSalesService();
 
@@ -18,7 +18,9 @@ export const createNewSaleController = async (req, res) => {
 
         const saleId = v4();
 
-        const sale = { saleId, batchId, chickId, saleDate, quantitySold, chickPrice, totalAmount };
+        const total = quantitySold * chickPrice
+
+        const sale = { saleId, batchId, chickId, saleDate, quantitySold, chickPrice, totalAmount: total };
 
         const result = await createNewSaleService(sale);
 
@@ -85,7 +87,9 @@ export const updateSalesController = async (req, res) => {
 
     const editor = await fetchUsersService({ userId: req.params.editorId });
 
-    if (editor.recordset && editor.recordset.length > 0 && editor.recordset.userRole === 'Admin') {
+    if (editor?.recordset?.length > 0 && req.params.editorId === editor?.recordset[0].userId) {
+        permission = true;
+    } else if (editor?.recordset?.length > 0 && editor?.recordset[0].userRole === 'Admin') {
         permission = true;
     };
 
@@ -95,7 +99,19 @@ export const updateSalesController = async (req, res) => {
 
         if (permission) {
             try {
-                const result = await updateSalesService(req.params, req.body);
+                let editable = req.body;
+
+                if (req.body?.chickPrice) {
+                    const total = req.body.chickPrice * availableEntry.recordset[0].quantitySold;
+                    editable = { ...req.body, totalAmount: total };
+                };
+
+                if (req.body?.quantitySold) {
+                    const total = req.body.quantitySold * availableEntry.recordset[0].chickPrice;
+                    editable = { ...req.body, totalAmount: total };
+                };
+
+                const result = await updateSalesService(req.params, editable);
 
                 if (result.rowsAffected > 0) {
 
@@ -121,7 +137,10 @@ export const deleteSalesController = async (req, res) => {
     let permission = false;
 
     const editor = await fetchUsersService({ userId: req.params.editorId });
-    if (editor.recordset && editor.recordset.length > 0 && editor.recordset.userRole === 'Admin') {
+    
+    if (editor?.recordset?.length > 0 && req.params.editorId === editor?.recordset[0].userId) {
+        permission = true;
+    } else if (editor?.recordset?.length > 0 && editor?.recordset[0].userRole === 'Admin') {
         permission = true;
     };
 

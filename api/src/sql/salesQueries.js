@@ -5,7 +5,7 @@ export const fetchSalesQuery = `SELECT * FROM tbl_sales `;
 
 export const updateSalesQuery = (saleId, params) => {
     const queryFields = Object.keys(params).map(key => `${key} = '${params[key]}'`).join(', ')
-    const query = `UPDATE tbl_incubation SET ${queryFields} WHERE saleId = '${saleId}'`
+    const query = `UPDATE tbl_Sales SET ${queryFields} WHERE saleId = '${saleId}'`
     return query;
 };
 

@@ -2,6 +2,7 @@ import { v4 } from "uuid";
 import { createNewBatchService, deleteBatchService, fetchBatchesService, updateBatchService } from "../services/batchService.js";
 import { conflict, dataFound, sendBadRequest, sendCreated, sendDeleteSuccess, sendNotFound, sendServerError, unAuthorized } from "../helpers/httpStatusCodes.js";
 import { fetchUsersService } from "../services/usersServices.js";
+import { convertDateToISO, convertToSimpleDate } from "../helpers/helperFunctions.js";
 
 export const createNewBatchController = async (req, res) => {
     try {
@@ -9,7 +10,7 @@ export const createNewBatchController = async (req, res) => {
 
         const batchExists = await fetchBatchesService();
 
-        const exactBatch = batchExists.recordset.length > 0 && batchExists.recordset.filter(object => object.userId === userId && object.receivedDate === receivedDate && object.totalEggs === totalEggs && object.batchStatus === batchStatus);
+        const exactBatch = batchExists.recordset.length > 0 && batchExists.recordset.filter(object => object.userId === userId  && convertToSimpleDate(object.receivedDate) === receivedDate && object.totalEggs === +totalEggs && object.batchStatus === batchStatus );
 
         if (exactBatch.length > 0) {
             return conflict(res, 'This batch entry already exists.');
@@ -88,9 +89,11 @@ export const updateBatchController = async (req, res) => {
 
     let permission = false;
 
-
     const editor = await fetchUsersService({ userId: req.params.editorId });
-    if (editor.recordset && editor.recordset.length > 0 && editor.recordset.userRole === 'Admin') {
+
+    if (editor?.recordset?.length > 0 && req.params.editorId === editor.recordset[0].userId) {
+        permission = true;
+    } else if (editor?.recordset?.length > 0 && editor.recordset[0].userRole === 'Admin') {
         permission = true;
     };
 
@@ -125,9 +128,11 @@ export const deleteBatchController = async (req, res) => {
 
     let permission = false;
 
-
     const editor = await fetchUsersService({ userId: req.params.editorId });
-    if (editor.recordset && editor.recordset.length > 0 && editor.recordset.userRole === 'Admin') {
+
+    if (req.params.editorId === editor.recordset[0].userId) {
+        permission = true;
+    } else if (editor?.recordset?.length > 0 && editor.recordset[0].userRole === 'Admin') {
         permission = true;
     };
 

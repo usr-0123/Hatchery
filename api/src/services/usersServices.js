@@ -51,34 +51,26 @@ export const fetchUsersService = async (params) => {
         };
 
         if (params.userEmail) {
-            switch (params.userEmail) {
-                case params.userPassword:
-                    query = fetchAllUsersDetailsQuery + ` WHERE userEmail = '${params.userEmail}'`;
-                    break;
-                default:
-                    query = fetchUsersQuery + ` WHERE userEmail = '${params.userEmail}'`;
+            if (params.userEmail && params.userPassword) {
+                query = fetchAllUsersDetailsQuery + ` WHERE userEmail = '${params.userEmail}'`;
+            } else {
+                query = fetchUsersQuery + ` WHERE userEmail = '${params.userEmail}'`;
             };
         };
 
-
-
         if (params.userName) {
-            switch (params.userName) {
-                case params.usrPassword:
-                    query = fetchAllUsersDetailsQuery + ` WHERE userName = '${params.userName}'`;
-                    break
-                default:
-                    query = fetchUsersQuery + ` WHERE userName = '${params.userName}'`;
+            if (params.userName && params.userPassword) {
+                query = fetchAllUsersDetailsQuery + ` WHERE userName = '${params.userName}'`;
+            } else {
+                query = fetchUsersQuery + ` WHERE userName = '${params.userName}'`;
             };
         };
 
         if (params.userPhoneNumber) {
-            switch (params.userPhoneNumber) {
-                case params.usrPassword:
-                    query = fetchAllUsersDetailsQuery + ` WHERE userPhoneNumber = '${params.userPhoneNumber}'`;
-                    break;
-                default:
-                    query = fetchUsersQuery + ` WHERE userPhoneNumber = '${params.userPhoneNumber}'`;
+            if (params.userName && params.userPhoneNumber) {
+                query = fetchAllUsersDetailsQuery + ` WHERE userPhoneNumber = '${params.userPhoneNumber}'`;
+            } else {
+                query = fetchUsersQuery + ` WHERE userPhoneNumber = '${params.userPhoneNumber}'`;
             };
         };
     };

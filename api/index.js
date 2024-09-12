@@ -39,7 +39,7 @@ app.use('/api', batchRoutes);
 app.use('/api', chickRoutes);
 app.use('/api', eggsRoutes);
 app.use('/api', hatchRecordRoutes)
-app.use('api', incubationRoutes)
+app.use('/api', incubationRoutes)
 app.use('/api', salesRoutes)
 
 app.listen(PORT, () => {

@@ -1,4 +1,4 @@
-import { createNewSaleQuery, deleteSalesQuery, updateSalesQuery } from "../sql/salesQueries.js";
+import { createNewSaleQuery, deleteSalesQuery, fetchSalesQuery, updateSalesQuery } from "../sql/salesQueries.js";
 import { poolrequest, sql } from "../utilis/connect.js";
 
 export const createNewSaleService = async (params) => {
@@ -24,7 +24,7 @@ export const createNewSaleService = async (params) => {
 export const fetchSalesService = async (params) => {
     let query;
 
-    if (!query) {
+    if (!params) {
         query = fetchSalesQuery;
     } else {
         if (params.saleId) {
@@ -42,11 +42,11 @@ export const fetchSalesService = async (params) => {
         if (params.saleDate) {
             query = fetchSalesQuery + `WHERE saleDate = '${params.saleDate}'`;
         };
-
     };
 
     try {
         const result = await poolrequest().query(query);
+        
         return result;
     } catch (error) {
         return error;
@@ -55,7 +55,7 @@ export const fetchSalesService = async (params) => {
 
 export const updateSalesService = async ({ saleId }, params) => {
     let query = updateSalesQuery(saleId, params);
-
+    
     try {
         const result = await poolrequest().query(query);
         return result;
