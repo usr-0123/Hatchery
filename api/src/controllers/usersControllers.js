@@ -88,7 +88,7 @@ export const loginUserController = async (req, res) => {
             if (valid) {
                 const token = jwt.sign({
                     userId: user.recordset[0].userId,
-                    userRole: user.recordset.userRole,
+                    userRole: user.recordset[0].userRole,
                     userEmail: user.recordset[0].userEmail,
                     userName: user.recordset[0].userName,
                     firstName: user.recordset[0].firstName,
