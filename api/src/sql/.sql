@@ -98,7 +98,7 @@ drop table tbl_Chicks;
 
 CREATE TABLE tbl_Sales
 (
-    saleId VARCHAR(255),
+    saleId VARCHAR(255) PRIMARY KEY,
     batchId VARCHAR(255),
     chickId VARCHAR(255),
     saleDate DATE,
@@ -112,6 +112,16 @@ CREATE TABLE tbl_Sales
 );
 
 drop table tbl_sales;
+
+CREATE TABLE tbl_ProductPrices (
+    productPriceId VARCHAR(255) PRIMARY KEY, -- Auto-incremented unique identifier
+    product_name VARCHAR(255) NOT NULL, -- Product name
+    price DECIMAL(10, 2) NOT NULL, -- Price with 2 decimal places
+    currency VARCHAR(10) NOT NULL, -- Currency (e.g., USD)
+    date_updated DATE NOT NULL -- Date the price was last updated
+);
+
+drop TABLE product_Prices;
 
 -- We have farmers and hatchery cooperative society
 -- The coop society has staff and admins

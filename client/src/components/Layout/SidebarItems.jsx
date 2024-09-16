@@ -2,7 +2,7 @@ import React from "react";
 import { UserOutlined, HomeOutlined } from '@ant-design/icons';
 
 export let farmerSidebarItems = [
-    { key: 'farmerHome', label: 'Home', path: '/dashboard/farmer', icon: <HomeOutlined /> },
+    { key: 'farmerHome', label: 'Home', path: '/dashboard/farmer/farmer-home', icon: <HomeOutlined /> },
     { key: 'userProfile', label: 'Profile', path: '/dashboard/farmer', icon: <UserOutlined /> },
 ];
 

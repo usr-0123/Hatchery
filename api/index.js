@@ -12,6 +12,7 @@ import eggsRoutes from './src/routes/eggsRoutes.js';
 import hatchRecordRoutes from './src/routes/hatchRecordsRoutes.js';
 import incubationRoutes from './src/routes/incubationRoutes.js';
 import salesRoutes from './src/routes/salesRoutes.js';
+import productPriceRoutes from './src/routes/productPriceRoutes.js';
 
 dotenv.config();
 
@@ -41,6 +42,7 @@ app.use('/api', eggsRoutes);
 app.use('/api', hatchRecordRoutes)
 app.use('/api', incubationRoutes)
 app.use('/api', salesRoutes)
+app.use('/api', productPriceRoutes)
 
 app.listen(PORT, () => {
     logger.info(`The server is running on port ${PORT}`);

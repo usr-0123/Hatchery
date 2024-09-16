@@ -1,8 +1,17 @@
-import React from 'react'
+import React from 'react';
+import { Route, Routes } from 'react-router-dom';
 
-const User_Dashboard = () => {
+import Farmer_Home from '../components/Layout/Dashboard/Farmer/Farmer_Home.jsx';
+
+function User_Dashboard() {
+
   return (
-    <div>Farmer_Dashboard</div>
+    <>
+      <Routes>
+        <Route index element={<Farmer_Home />} />
+        <Route path='/farmer-home' element={<Farmer_Home />} />
+      </Routes>
+    </>
   );
 };
 
