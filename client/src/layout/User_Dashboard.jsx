@@ -2,7 +2,7 @@ import React from 'react'
 
 const User_Dashboard = () => {
   return (
-    <div>User_Dashboard</div>
+    <div>Farmer_Dashboard</div>
   );
 };
 

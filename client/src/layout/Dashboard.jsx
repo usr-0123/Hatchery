@@ -1,78 +1,91 @@
 import React, { useEffect, useState } from 'react'
-
 import { Button, Layout, Menu, theme } from 'antd';
 import { Content, Footer, Header } from 'antd/es/layout/layout.js';
 import { LogoutOutlined, MenuFoldOutlined, MenuOutlined, UserOutlined } from '@ant-design/icons';
 
-import { clearStorageOnTokenExpiry, decodeToken } from '../helpers/token.js';
 import { Route, Routes, useNavigate } from 'react-router-dom';
+
+import { clearStorageOnTokenExpiry, decodeToken } from '../helpers/token.js';
 import { logout } from '../helpers/logout.js';
 import Sider from 'antd/es/layout/Sider.js';
 
-import { adminSideBarItems, userSidebarItems } from '../components/Layout/SidebarItems.jsx';
+import { adminSideBarItems, employeeSideBarItems, farmerSidebarItems } from '../components/Layout/SidebarItems.jsx';
+
 import User_Dashboard from './User_Dashboard.jsx';
 import Admin_Dashboard from './Admin_Dashboard.jsx';
 import Employee_Dashboard from './Employee_Dashboard.jsx';
 
-// Check user role first
 const Dashboard = () => {
   const [isCollapsed, setIsCollapsed] = useState(true);
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [sidebarItems, setSidebarItems] = useState(null);
+  const [role, setRole] = useState(null);
   const [userDetails, setUserDetails] = useState(null);
   const [login, setLogin] = useState(false);
   const navigate = useNavigate();
 
-  const user = decodeToken();
-  console.log(user);
-
-  const handleLogout = async () => {
-    const route = await logout();
-    navigate(route.route, { replace: true });
-  };
-
-  useEffect(() => {
-    const response = clearStorageOnTokenExpiry();
-
-    if (response && response.route) {
-      navigate(response.route, { replace: true });
-    };
-  }, [navigate]);
-
   useEffect(() => {
     const user = decodeToken();
 
-    if (user) {
+    if (!user) {
+      handleLogout();
+    } else {
       setUserDetails(user);
+      setRole(user.userRole);
     }
 
-    if (!user) {
-      handleLogout()
-    } else if (user.userRole === 'Employee' && !login) {
-      setIsAdmin(false);
-      setLogin(!login);
-      navigate("/dashboard/user", { replace: true });
-    } else if (user.userRole === 'Admin' && !login) {
-      setIsAdmin(true);
-      setLogin(!login);
-      navigate("/dashboard/admin", { replace: true });
-    } else {
-      setIsAdmin(false);
-      setLogin(!login);
-      navigate("/dashboard/admin", { replace: true });
-    };
+    const tokenExpiryResponse = clearStorageOnTokenExpiry();
+    if (tokenExpiryResponse?.route) {
+      navigate(tokenExpiryResponse.route, { replace: true });
+    }
   }, [navigate]);
+
+  useEffect(() => {
+    if (role && !login) {
+      setLogin(true);
+
+      if (role === 'Employee') {
+        navigate("/dashboard/user", { replace: true });
+      } else if (role === 'Admin') {
+        navigate("/dashboard/admin", { replace: true });
+      } else if (role === 'Farmer') {
+        navigate("/dashboard/farmer", { replace: true });
+      }
+    }
+  }, [role, login, navigate]);
+
+  useEffect(() => {
+    if (role) {
+      switch (role) {
+        case 'Admin':
+          setSidebarItems(adminSideBarItems);
+          break;
+        case 'Employee':
+          setSidebarItems(employeeSideBarItems);
+          break;
+        case 'Farmer':
+          setSidebarItems(farmerSidebarItems);
+          break;
+        default:
+          setSidebarItems(null);
+      }
+    }
+  }, [role]);
 
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
 
   const handleMenuClick = (item) => {
-
-    if (!item && !item.key) {
-      logout();
-    } else {
+    if (item?.key) {
       navigate(item.item.props.path);
+    } else {
+      handleLogout();
     }
+  };
+
+  const handleLogout = async () => {
+    const route = await logout();
+    navigate(route.route, { replace: true });
   };
 
   return (
@@ -133,11 +146,11 @@ const Dashboard = () => {
             <Menu
               mode="inline"
               defaultSelectedKeys={[location.pathname]}
-              defaultOpenKeys={isAdmin ? ['adminHome'] : ['userHome']}
+              defaultOpenKeys={sidebarItems && sidebarItems[0].key}
               style={{
                 height: '100%',
               }}
-              items={isAdmin ? adminSideBarItems : userSidebarItems}
+              items={sidebarItems}
               onClick={(e) => handleMenuClick(e)}
             />
           </Sider>
@@ -148,7 +161,7 @@ const Dashboard = () => {
             }}
           >
             <Routes>
-              <Route path="user/*" element={<User_Dashboard />} />
+              <Route path="farmer/*" element={<User_Dashboard />} />
               <Route path="admin/*" element={<Admin_Dashboard />} />
               <Route path='employee/*' element={<Employee_Dashboard />} />
             </Routes>

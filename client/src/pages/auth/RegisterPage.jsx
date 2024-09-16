@@ -14,7 +14,6 @@ const RegisterPage = () => {
     const navigate = useNavigate();
 
     const onFinish = (e) => {
-        console.log(e);
         const { firstName, lastName, surName, userName, userEmail, userPassword, userPhoneNumber, userStreet, userLocation } = ''
     };
 

@@ -3,7 +3,6 @@ import { alertService } from "../helpers/alert.js";
 const { showAlert } = alertService();
 
 export const interceptor = ({ params, type }) => {
-    // console.log(params, type);
 
     if (!params) {
         showAlert('Error occured!', 'There was a problem occured. Please retry.', 'error')
