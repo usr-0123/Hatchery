@@ -16,6 +16,11 @@ export const interceptor = ({ params, type }) => {
                 return null;
             };
 
+            if (params.error.status === 401) {
+                showAlert('Unauthorised rights!', params.error.data.Message, 'error')
+                return null;
+            };
+
             if (params.error.status === 404) {
                 showAlert('Entry not found!', params.error.data.Message, 'error')
                 // If the user logged in, then log the user out.
@@ -35,10 +40,15 @@ export const interceptor = ({ params, type }) => {
 
     } else if (params.data) {
         if (type === 'Mutation') {
-            if (params.data) {
+
+            if (params.data.data) {
                 showAlert('Execution successful', params.data.Message, 'success')
                 return { token: params.data.data };
+            } else {
+                showAlert('Execution successful', params.data.Message, 'success')
+                return true;
             };
+
         } else if (type === 'Query') {
             if (params.data) {
                 return { token: params.data.data };

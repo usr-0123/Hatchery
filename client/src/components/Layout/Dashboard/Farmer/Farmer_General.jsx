@@ -40,7 +40,7 @@ const Farmer_General = ({ productPrices, batches }) => {
                     <Card>
                         <Statistic
                             title="Current Eggs Buying Price"
-                            value={eggPriceObj.price}
+                            value={eggPriceObj?.price}
                             precision={2}
                             prefix="Ksh"
                             valueStyle={{ color: '#cf1322' }}

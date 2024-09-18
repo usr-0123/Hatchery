@@ -11,6 +11,7 @@ export const logout = async (params) => {
         
         if (timeout) {
             showAlert('warning', 'Session time out. Please login again', 'warning', 3)
+            window.location.reload();
         };
     };
 

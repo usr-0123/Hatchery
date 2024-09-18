@@ -13,7 +13,6 @@ const Farmer_Home = () => {
     const [batches, setBatches] = useState([]);
     const [productPrices, setProductPrices] = useState([]);
 
-
     useEffect(() => {
         const decodedUser = decodeToken();
         setUser(decodedUser);
@@ -53,7 +52,7 @@ const Farmer_Home = () => {
             label: 'Daily Supply',
             children: <Farmer_Production productPrices={productPrices} batches={batches} />,
         }, {
-            key: '3',
+            key: 'product-rates',
             label: 'Product Rates',
             children: <Farmer_PriceRates productPrices={productPrices} batches={batches} />,
         }

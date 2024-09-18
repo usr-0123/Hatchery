@@ -4,7 +4,7 @@ import { verifyTokenMiddleware } from '../middlewares/authMiddlewares.js';
 
 const userRoutes = Router();
 
-userRoutes.post('/user/register', registerUserController);
+userRoutes.post('/user/register/:editorId', verifyTokenMiddleware, registerUserController);
 userRoutes.post('/user/login', loginUserController);
 userRoutes.get('/users/all', verifyTokenMiddleware, fetchUsersController);
 userRoutes.get('/users/street/:street', verifyTokenMiddleware, fechUserbyUserStreetController);

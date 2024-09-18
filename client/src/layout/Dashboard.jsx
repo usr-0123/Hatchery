@@ -47,7 +47,7 @@ const Dashboard = () => {
         navigate("/dashboard/user", { replace: true });
       } else if (role === 'Admin') {
         navigate("/dashboard/admin", { replace: true });
-      } else if (role === 'Farmer') {
+      } else if (role === 'User') {
         navigate("/dashboard/farmer", { replace: true });
       }
     }
@@ -62,7 +62,7 @@ const Dashboard = () => {
         case 'Employee':
           setSidebarItems(employeeSideBarItems);
           break;
-        case 'Farmer':
+        case 'User':
           setSidebarItems(farmerSidebarItems);
           break;
         default:
@@ -97,7 +97,7 @@ const Dashboard = () => {
           color: 'transparent',
           justifyContent: 'space-between'
         }}>
-        <h1 style={{ color: '#fff' }}>Hatchery</h1>
+        <h1 style={{ color: '#fff' }}>Hatchery Management System</h1>
         <div style={{
           display: 'flex',
           alignItems: 'center',

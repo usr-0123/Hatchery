@@ -10,6 +10,18 @@ import { sendMail } from '../email/emailTemp.js';
 
 export const registerUserController = async (req, res) => {
     try {
+        let permission = false;
+
+        const editor = await fetchUsersService({ userId: req.params.editorId });
+
+        if (editor?.recordset?.length > 0 && editor.recordset[0].userRole === 'Admin') {
+            permission = true;
+        };
+
+        if (!permission) {
+            return unAuthorized(res, "You are not allowed to register a new account.");
+        };
+
         const { firstName, lastName, userEmail, userPassword } = req.body;
         const validation = registerUserValidator({ firstName, lastName, userEmail, userPassword });
 
@@ -39,7 +51,7 @@ export const registerUserController = async (req, res) => {
                     userId,
                     firstName: formatNameCase(firstName),
                     lastName: formatNameCase(lastName),
-                    surName: surName? formatNameCase(surName) : null,
+                    surName: surName ? formatNameCase(surName) : null,
                     userName: userName?.toLowerCase(),
                     userEmail: userEmail?.toLowerCase(),
                     userPassword: hashedUserPassword,
@@ -82,7 +94,7 @@ export const loginUserController = async (req, res) => {
         if (user && user.recordset.length < 1) {
             return sendNotFound(res, 'No user found with the details provided.')
         } else {
-            
+
             const valid = await bcrypt.compare(req.body.userPassword, user.recordset[0].userPassword);
 
             if (valid) {
@@ -305,7 +317,7 @@ export const updateUserDetailsController = async (req, res) => {
 
                     return dataFound(res, result.recordset, `User record updated successfully`);
                 } else {
-                    return sendBadRequest(res, `Details not updated!`)
+                    return sendBadRequest(res, `User details not updated!`)
                 }
 
             } catch (error) {
@@ -328,7 +340,8 @@ export const deleteUserController = async (req, res) => {
         permission = true;
     } else {
         const editor = await fetchUsersService({ userId: req.params.editorId });
-        if (editor.recordset && editor.recordset.length > 0 && editor.recordset.userRole === 'Admin') {
+        
+        if (editor.recordset && editor.recordset.length > 0 && editor.recordset[0].userRole === 'Admin') {
             permission = true;
         };
     };
@@ -351,7 +364,7 @@ export const deleteUserController = async (req, res) => {
 
                     sendMail(mailOptions);
 
-                    return sendDeleteSuccess(res, 'Entry deleted successfully');
+                    return sendDeleteSuccess(res, 'User deleted successfully');
                 } else {
                     return sendServerError(res, 'There was a problem occurred while deleting record');
                 };

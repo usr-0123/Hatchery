@@ -1,5 +1,5 @@
 import React from "react";
-import { UserOutlined, HomeOutlined } from '@ant-design/icons';
+import { UserOutlined, HomeOutlined, UsergroupDeleteOutlined, ProductOutlined } from '@ant-design/icons';
 
 export let farmerSidebarItems = [
     { key: 'farmerHome', label: 'Home', path: '/dashboard/farmer/farmer-home', icon: <HomeOutlined /> },
@@ -7,7 +7,9 @@ export let farmerSidebarItems = [
 ];
 
 export let adminSideBarItems = [
-    { key: 'adminHome', label: 'Home', path: '/dashboard/admin', icon: <HomeOutlined /> },
+    { key: 'adminHome', label: 'Home', path: '/dashboard/admin/admin-home', icon: <HomeOutlined /> },
+    { key: 'users', label: 'Users', path: '/dashboard/admin/admin-users', icon: <UsergroupDeleteOutlined /> },
+    { key: 'products', label: 'Products', path: '/dashboard/admin/admin-products', icon: <ProductOutlined /> },
     { key: 'adminProfile', label: 'Profile', path: '/dashboard/admin', icon: <UserOutlined /> },
 ];
 

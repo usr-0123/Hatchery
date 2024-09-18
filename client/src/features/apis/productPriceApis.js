@@ -57,15 +57,16 @@ export const productPriceApi = createApi({
         }),
 
         updateProductPrice: builder.mutation({
-            query: ({ editorId, productPriceId }) => ({
+            query: ({ editorId, productPriceId, editedValues }) => ({
                 url: `/product-price/update/${editorId}/${productPriceId}`,
                 method: 'PATCH',
+                body: editedValues
             }),
             invalidatesTags: ['ProductPrice'],
         }),
 
         deleteProductPrice: builder.mutation({
-            query: (editorId, productPriceId) => ({
+            query: ({editorId, productPriceId}) => ({
                 url: `/product-price/delete/${editorId}/${productPriceId}`,
                 method: 'DELETE',
             }),

@@ -19,8 +19,8 @@ export const usersApi = createApi({
     endpoints: (builder) => ({
 
         registerUser: builder.mutation({
-            query: (user) => ({
-                url: '/user/register',
+            query: ({ editorId, user }) => ({
+                url: `/user/register/${editorId}`,
                 method: 'POST',
                 body: user,
             }),
@@ -85,7 +85,7 @@ export const usersApi = createApi({
         }),
 
         deleteUser: builder.mutation({
-            query: (editorId, userId) => ({
+            query: ({editorId, userId}) => ({
                 url: `/user/delete/${editorId}/${userId}`,
                 method: 'DELETE',
             }),

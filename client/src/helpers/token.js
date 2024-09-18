@@ -33,7 +33,7 @@ export const clearStorageOnTokenExpiry = () => {
         if (token.exp < currentTime) {
 
             return logout({ timeout: 'timeout' })
-        }
+        };
     };
 
     if (!token) {
