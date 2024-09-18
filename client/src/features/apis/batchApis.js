@@ -62,7 +62,7 @@ export const batchApi = createApi({
         }),
 
         deletebatch: builder.mutation({
-            query: (editorId, batchId) => ({
+            query: ({ editorId, batchId }) => ({
                 url: `/batch/delete/${editorId}/${batchId}`,
                 method: 'DELETE',
             }),

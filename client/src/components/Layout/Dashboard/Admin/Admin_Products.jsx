@@ -94,6 +94,7 @@ const Admin_Products = () => {
       <Table title={() => 'Products Price Rates'} onRow={(record) => ({ onClick: () => handleSelect(record.productPriceId) })} key='productPriceId' columns={columns} dataSource={productPrices} pagination={{ pageSize: 5 }} />
       <Modal
         title="Product Price Details"
+        key="productsModal"
         centered
         open={isModalOpen}
         onOk={() => setIsModalOpen(false)}
