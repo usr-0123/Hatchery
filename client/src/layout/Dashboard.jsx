@@ -44,7 +44,7 @@ const Dashboard = () => {
       setLogin(true);
 
       if (role === 'Employee') {
-        navigate("/dashboard/user", { replace: true });
+        navigate("/dashboard/employee", { replace: true });
       } else if (role === 'Admin') {
         navigate("/dashboard/admin", { replace: true });
       } else if (role === 'User') {
@@ -89,7 +89,7 @@ const Dashboard = () => {
   };
 
   return (
-    <Layout style={{ minHeight: '97vh' }} >
+    <Layout style={{ height: '97vh', overflow: 'hidden' }} >
       <Header
         style={{
           display: 'flex',
@@ -157,7 +157,8 @@ const Dashboard = () => {
           <Content
             style={{
               padding: '0 24px',
-              minHeight: 280,
+              overflow: 'auto',
+              height: '75vh',
             }}
           >
             <Routes>
@@ -170,7 +171,11 @@ const Dashboard = () => {
       </Content>
       <Footer
         style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
           textAlign: 'center',
+          height: '1vh'
         }}
       >
         Hatchery ©{new Date().getFullYear()} Created by Luwi

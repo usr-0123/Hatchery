@@ -15,6 +15,9 @@ export let adminSideBarItems = [
 ];
 
 export let employeeSideBarItems = [
-    { key: 'employeeHome', label: 'Home', path: '/dashboard/employee', icon: <HomeOutlined /> },
+    { key: 'employeeHome', label: 'Home', path: '/dashboard/employee/employee-home', icon: <HomeOutlined /> },
+    { key: 'employeeales', label: 'Sales', path: '/dashboard/employee/employee-sales', icon: <LineChartOutlined /> },
+    { key: 'employeeIncubation', label: 'Incubation', path: '/dashboard/employee/employee-incubation', icon: <HomeOutlined /> },
+    { key: 'employeeHatchery', label: 'Hatchery', path: '/dashboard/employee/employee-hatchery', icon: <HomeOutlined /> },
     { key: 'adminProfile', label: 'Profile', path: '/dashboard/employee', icon: <UserOutlined /> },
 ];

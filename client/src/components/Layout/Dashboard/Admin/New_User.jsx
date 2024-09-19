@@ -31,7 +31,6 @@ const New_User = () => {
         if (response) {
             form.resetFields();
         };
-
     };
 
     return (

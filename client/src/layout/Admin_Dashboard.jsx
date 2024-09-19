@@ -8,7 +8,7 @@ import Admin_Sales from '../components/Layout/Dashboard/Admin/Admin_Sales.jsx';
 
 const Admin_Dashboard = () => {
   return (
-    <>
+    <div>
       <Routes>
         <Route index element={<Admin_Home />} />
         <Route path='/admin-home' element={<Admin_Home />} />
@@ -16,8 +16,10 @@ const Admin_Dashboard = () => {
         <Route path='/admin-users' element={<Admin_Users />} />
         <Route path='/admin-Sales' element={<Admin_Sales />} />
       </Routes>
-    </>
+    </div>
   );
 };
 
 export default Admin_Dashboard;
+
+// reports module

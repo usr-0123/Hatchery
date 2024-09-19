@@ -5,6 +5,7 @@ import Admin_Eggs from './Admin_Eggs.jsx';
 import Admin_Chicks from './Admin_Chicks.jsx';
 import { useFetchbatchesQuery } from '../../../../features/apis/batchApis.js';
 import Admin_SalesDashboard from './Admin_SalesDashboard.jsx';
+import Admin_HomeDashboard from './Admin_HomeDashboard.jsx';
 
 const Admin_Home = () => {
   const [batchArray, setBatchArray] = useState([]);
@@ -54,7 +55,10 @@ const Admin_Home = () => {
   }, [batchArray]);
 
   const tabItems = [
-    {
+    {key: 'admin-general-tab',
+      label: 'General',
+      children: <Admin_HomeDashboard />,
+    }, {
       key: 'admin-sales',
       label: 'Sales Records',
       children: <Admin_SalesDashboard />,
