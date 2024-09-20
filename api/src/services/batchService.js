@@ -1,4 +1,4 @@
-import { createNewBatchQuery, deleteBatchQuery, fetchBatchQuery, updateBatchQuery } from "../sql/batchQueries.js";
+import { batchJoinQuery, createNewBatchQuery, deleteBatchQuery, fetchBatchQuery, updateBatchQuery } from "../sql/batchQueries.js";
 import { poolrequest, sql } from "../utilis/connect.js";
 
 export const createNewBatchService = async (batch) => {
@@ -40,6 +40,37 @@ export const fetchBatchesService = async (params) => {
             query = fetchBatchQuery + `WHERE batchStatus = '${params.batchStatus}'`;
         };
 
+    };
+
+    try {
+        const result = await poolrequest().query(query);
+        return result;
+    } catch (error) {
+        return error;
+    };
+};
+
+export const fetchUJBatchesService = async (params) => {
+    let query;
+
+    if (!params) {
+        query = batchJoinQuery;
+    } else {
+        if (params.batchId) {
+            query = batchJoinQuery + `WHERE batchId = '${params.batchId}'`;
+        };
+
+        if (params.userId) {
+            query = batchJoinQuery + `WHERE userId = '${params.userId}'`;
+        };
+
+        if (params.receivedDate) {
+            query = batchJoinQuery + `WHERE receivedDate = '${params.receivedDate}'`;
+        };
+
+        if (params.batchStatus) {
+            query = batchJoinQuery + `WHERE batchStatus = '${params.batchStatus}'`;
+        };
     };
 
     try {

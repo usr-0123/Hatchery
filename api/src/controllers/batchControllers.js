@@ -1,5 +1,5 @@
 import { v4 } from "uuid";
-import { createNewBatchService, deleteBatchService, fetchBatchesService, updateBatchService } from "../services/batchService.js";
+import { createNewBatchService, deleteBatchService, fetchBatchesService, fetchUJBatchesService, updateBatchService } from "../services/batchService.js";
 import { conflict, dataFound, sendBadRequest, sendCreated, sendDeleteSuccess, sendNotFound, sendServerError, unAuthorized } from "../helpers/httpStatusCodes.js";
 import { fetchUsersService } from "../services/usersServices.js";
 import { convertDateToISO, convertToSimpleDate } from "../helpers/helperFunctions.js";
@@ -10,7 +10,7 @@ export const createNewBatchController = async (req, res) => {
 
         const batchExists = await fetchBatchesService();
 
-        const exactBatch = batchExists.recordset.length > 0 && batchExists.recordset.filter(object => object.userId === userId  && convertToSimpleDate(object.receivedDate) === receivedDate && object.totalEggs === +totalEggs && object.batchStatus === batchStatus );
+        const exactBatch = batchExists.recordset.length > 0 && batchExists.recordset.filter(object => object.userId === userId && convertToSimpleDate(object.receivedDate) === receivedDate && object.totalEggs === +totalEggs && object.batchStatus === batchStatus);
 
         if (exactBatch.length > 0) {
             return conflict(res, 'This batch entry already exists.');
@@ -42,7 +42,6 @@ export const createNewBatchController = async (req, res) => {
 };
 
 export const fetchBatchesController = async (req, res) => {
-
     try {
         const result = await fetchBatchesService();
 
@@ -67,6 +66,49 @@ export const fetchBatchesController = async (req, res) => {
 export const fetchBatchController = async (req, res) => {
     try {
         const result = await fetchBatchesService(req.params);
+
+        if (result.recordset) {
+            let fetchMessage = '';
+
+            if (result.rowsAffected > 0) {
+                fetchMessage = 'Batch record fetched.';
+            } else {
+                fetchMessage = 'No records available.';
+            };
+
+            return dataFound(res, result.recordset, fetchMessage);
+        };
+
+    } catch (error) {
+        return sendServerError(res, error);
+    };
+};
+
+export const fetchUJBatchController = async (req, res) => {
+    try {
+        const result = await fetchUJBatchesService(req.params);
+
+        if (result.recordset) {
+            let fetchMessage = '';
+
+            if (result.rowsAffected > 0) {
+                fetchMessage = 'Batch record fetched.';
+            } else {
+                fetchMessage = 'No records available.';
+            };
+
+            return dataFound(res, result.recordset, fetchMessage);
+        };
+
+    } catch (error) {
+        return sendServerError(res, error);
+    };
+};
+
+export const fetchUJBatchesController = async (req, res) => {
+    
+    try {
+        const result = await fetchUJBatchesService();
 
         if (result.recordset) {
             let fetchMessage = '';

@@ -32,6 +32,11 @@ export const batchApi = createApi({
             providesTags: ['Batches'],
         }),
 
+        fetchJointBatches: builder.query({
+            query: () => '/batch/fetch/join/all',
+            providesTags: ['Batches'],
+        }),
+
         fetchBatchByBatchId: builder.query({
             query: (batchId) => `/batch/fetch/batchId/${batchId}`,
             providesTags: ['Batches'],
@@ -71,4 +76,4 @@ export const batchApi = createApi({
     }),
 });
 
-export const { useCreateBatchMutation, useFetchbatchesQuery, useFetchBatchByBatchIdQuery, useFetchBatchByUserIdQuery, useLazyFetchBatchByReceivedDateQuery, useFetchBatchByBatchStatusQuery, useUpdateBatchMutation, useDeletebatchMutation } = batchApi;
+export const { useCreateBatchMutation, useFetchbatchesQuery, useFetchBatchByBatchIdQuery, useFetchJointBatchesQuery, useFetchBatchByUserIdQuery, useFetchBatchByReceivedDateQuery, useFetchBatchByBatchStatusQuery, useUpdateBatchMutation, useDeletebatchMutation } = batchApi;

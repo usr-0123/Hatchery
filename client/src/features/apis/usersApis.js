@@ -95,4 +95,4 @@ export const usersApi = createApi({
     }),
 });
 
-export const { useRegisterUserMutation, useAuthenticateUserMutation, useGetAllUsersQuery, useGetUserByPhoneNumberQuery, useGetUserByUserNameQuery, useGetUserByEmailQuery, useLazyGetUserByUserIdQuery, useGetUserByMembershipDateQuery, useGetUserByLocationQuery, useGetUserByStreetQuery, useUpdateUserDetailsMutation, useDeleteUserMutation } = usersApi;
+export const { useRegisterUserMutation, useAuthenticateUserMutation, useGetAllUsersQuery, useGetUserByPhoneNumberQuery, useGetUserByUserNameQuery, useGetUserByEmailQuery, useGetUserByUserIdQuery, useGetUserByMembershipDateQuery, useGetUserByLocationQuery, useGetUserByStreetQuery, useUpdateUserDetailsMutation, useDeleteUserMutation } = usersApi;

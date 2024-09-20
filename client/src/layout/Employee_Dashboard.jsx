@@ -2,10 +2,10 @@ import React from 'react'
 
 import { Route, Routes } from 'react-router-dom';
 
-import Employee_Home from '../components/Layout/Dashboard/Employee/Employee_Home.jsx';
-import Employee_Sales from '../components/Layout/Dashboard/Employee/Employee_Sales.jsx';
-import Employee_Incubation from '../components/Layout/Dashboard/Employee/Employee_Incubation.jsx';
-import Employee_Hatchery from '../components/Layout/Dashboard/Employee/Employee_Hatchery.jsx';
+import Employee_Home from '../components/Page/Employee/Employee_Home.jsx';
+import Employee_Sales from '../components/Page/Employee/Employee_Sales.jsx';
+import Employee_Incubation from '../components/Page/Employee/Employee_Incubation.jsx';
+import Employee_Hatchery from '../components/Page/Employee/Employee_Hatchery.jsx';
 
 const Employee_Dashboard = () => {
   return (

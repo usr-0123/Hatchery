@@ -8,7 +8,7 @@ import { interceptor } from '../../../../services/Interceptor.js';
 
 const New_User = () => {
     const [form] = Form.useForm();
-    const [register, { isLoading: registeringUser, data: registerUserData }] = useRegisterUserMutation();
+    const [register, { isLoading: registeringUser }] = useRegisterUserMutation();
 
     const userRoles = [
         {
