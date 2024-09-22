@@ -21,6 +21,7 @@ export const hatchApi = createApi({
             query: (hatch) => ({
                 url: '/hatchRecord/add',
                 body: hatch,
+                method: 'POST',
             }),
             invalidatesTags: ['HatchRecord'],
         }),
@@ -49,6 +50,7 @@ export const hatchApi = createApi({
             query: ({ editorId, hatchRecordId, editedValues }) => ({
                 url: `/hatcheRecord/update/${editorId}/${hatchRecordId}`,
                 body: editedValues,
+                method: 'PATCH',
             }),
             invalidatesTags: ['HatchRecord'],
         }),
@@ -56,6 +58,7 @@ export const hatchApi = createApi({
         deleteHatch: builder.mutation({
             query: ({ editorId, hatchRecordId }) => `/hatchRecord/delete/${editorId}/${hatchRecordId}`,
             invalidatesTags: ['HatchRecord'],
+            method: 'DELETE',
         }),
     }),
 });

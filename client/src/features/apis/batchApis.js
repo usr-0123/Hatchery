@@ -76,4 +76,14 @@ export const batchApi = createApi({
     }),
 });
 
-export const { useCreateBatchMutation, useFetchbatchesQuery, useFetchBatchByBatchIdQuery, useFetchJointBatchesQuery, useFetchBatchByUserIdQuery, useFetchBatchByReceivedDateQuery, useFetchBatchByBatchStatusQuery, useUpdateBatchMutation, useDeletebatchMutation } = batchApi;
+export const { 
+    useCreateBatchMutation, 
+    useFetchbatchesQuery, 
+    useFetchBatchByBatchIdQuery, 
+    useFetchJointBatchesQuery, 
+    useFetchBatchByUserIdQuery, 
+    useFetchBatchByReceivedDateQuery, 
+    useFetchBatchByBatchStatusQuery, 
+    useUpdateBatchMutation, 
+    useDeletebatchMutation 
+} = batchApi;

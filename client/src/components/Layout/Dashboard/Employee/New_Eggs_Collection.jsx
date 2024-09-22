@@ -2,7 +2,7 @@ import { Button, Card, Descriptions, Form, InputNumber, Select } from 'antd';
 import React, { useEffect, useState } from 'react'
 
 import { useCreateBatchMutation } from '../../../../features/apis/batchApis.js';
-import { interceptor } from '../../../../services/Interceptor';
+import { interceptor } from '../../../../services/Interceptor.js';
 
 const New_Eggs_Collection = ({ usersArray }) => {
     const [selectedUserId, setSelectedUserId] = useState(null);

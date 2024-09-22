@@ -17,7 +17,7 @@ const Collected_Eggs = ({ usersArray }) => {
     const [isDeleteModal, setIsDeleteModal] = useState(false);
 
     const { data: batchData, refetch: refetchBatches, isLoading: fetchingBatches } = useFetchJointBatchesQuery();
-
+    
     const [updateBatch, { isLoading: updatingBatch, }] = useUpdateBatchMutation();
 
     const [deleteBatch, { isLoading: deletingBatch }] = useDeletebatchMutation();
@@ -118,12 +118,12 @@ const Collected_Eggs = ({ usersArray }) => {
             <Table
                 title={() => 'Collected eggs'}
                 onRow={(record) => ({ onClick: () => handleSelect(record) })}
-                key="batchId"
+                key="collectedEggsTable"
                 loading={fetchingBatches}
                 columns={columns}
                 dataSource={eggsData}
                 pagination={{ pageSize: 5 }}
-                rowKey="saleId"
+                rowKey="batchId"
             />
             <Modal
                 title="Eggs Collection Record"

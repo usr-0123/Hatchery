@@ -18,9 +18,11 @@ export const incubationApi = createApi({
     }),
     tagTypes: ['Incubation'],
     endpoints: (builder) => ({
+
         createIncubation: builder.mutation({
             query: (incubation) => ({
                 url: '/incubation/add',
+                method: 'POST',
                 body: incubation,
             }),
             invalidatesTags: ['Incubation'],
@@ -60,13 +62,17 @@ export const incubationApi = createApi({
             query: ({ editorId, incubationId, editedValues }) => ({
                 url: `/incubation/update/${editorId}/${incubationId}`,
                 body: editedValues,
+                method: 'PATCH',
             }),
             invalidatesTags: ['Incubation'],
         }),
 
         deleteIncubation: builder.mutation({
-            query: ({incubationId, editorId}) => `/incubation/delete/${editorId}/${incubationId}`,
-            invalidatesTags: ['Incubation']
+            query: ({incubationId, editorId}) => ({
+                url: `/incubation/delete/${editorId}/${incubationId}`,
+                method: 'DELETE'
+            }),
+            invalidatesTags: ['Incubation'],
         }),
     }),
 });

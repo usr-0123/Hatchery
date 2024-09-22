@@ -16,7 +16,7 @@ export const store = configureStore({
         [batchApi.reducerPath]: batchApi.reducer,
         [productPriceApi.reducerPath]: productPriceApi.reducer,
         [salesApis.reducerPath]: salesApis.reducer,
-        [incubationApi.reducerPath]: productPriceApi.reducer,
+        [incubationApi.reducerPath]: incubationApi.reducer,
         [hatchApi.reducerPath]: hatchApi.reducer,
         [eggsApi.reducerPath]: eggsApi.reducer,
         [chicksApi.reducerPath]: chicksApi.reducer
