@@ -1,4 +1,8 @@
 export function convertDateToUIFormat(dateString) {
+    if (!dateString) {
+        return 'N/A'
+    };
+    
     const date = new Date(dateString);
 
     const year = date.getFullYear();

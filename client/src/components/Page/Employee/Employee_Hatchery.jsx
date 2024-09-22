@@ -11,7 +11,7 @@ const Employee_Hatchery = () => {
   const [batchesData, setBatchesData] = useState([]);
 
   const { data: batchData, refetch: refetchBatches, isLoading: fetchingBatches } = useFetchJointBatchesQuery();
-  
+
   useEffect(() => {
     if (batchData?.data) {
       const hatchery = batchData?.data.filter(object => object.batchStatus === 'hatched' || object.batchStatus === 'Hatched');
@@ -33,10 +33,6 @@ const Employee_Hatchery = () => {
       key: 'employee-hatcheries',
       label: 'Hatcheries',
       children: <Hatchery_Records batch={batchesData} loadingBatches={fetchingBatches} refetchBatches={refetchBatches} />,
-    // },{
-    //   key: 'employee-hatchery-general-tab',
-    //   label: 'New Hatchery',
-    //   children: <New_Hatchery batch={batchesData} loadingBatches={fetchingBatches} refetchBatches={refetchBatches} />,
     }
   ];
 

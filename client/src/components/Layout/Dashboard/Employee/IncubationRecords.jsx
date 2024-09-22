@@ -25,7 +25,7 @@ const columns = [
         title: 'Hatch Date',
         dataIndex: 'hatchDate',
         key: 'hatchDate',
-        render: (hatchDate) => { hatchDate ? convertDateToUIFormat(hatchDate) : 'N/A' },
+        render: (hatchDate) => convertDateToUIFormat(hatchDate),
     }
 ];
 
@@ -50,7 +50,6 @@ const IncubationRecords = ({ batch }) => {
     const [isEditValues, setEditIsEditValues] = useState({});
     const [isHatchValues, setIsHatchValues] = useState({});
     const [isHatched, setIsHatched] = useState(false);
-    const [editable, setEditable] = useState(true);
     const [editIncubation, { isLoading: editingIncubation }] = useUpdateIncubationMutation();
     const [updateBatch, {isLoading: updatingBatch}] = useUpdateBatchMutation();
     const [newHatch, { isLoading: creatingHatch }] = useCreateRecordMutation();
@@ -130,7 +129,6 @@ const IncubationRecords = ({ batch }) => {
                 setIsModalOpen(false);
             };
         };
-
     };
 
     useEffect(() => {
@@ -174,7 +172,7 @@ const IncubationRecords = ({ batch }) => {
                 columns={columns}
                 dataSource={incubationArray}
                 pagination={{ pageSize: 5 }}
-                rowKey="batchId"
+                rowKey="IncubationId"
             />
             <Modal
                 key='selectedIncubationModal'
@@ -252,6 +250,7 @@ const IncubationRecords = ({ batch }) => {
             <Modal
                 title='Confirm deleting this incubation record?'
                 open={isDeleteModalOpen}
+                key='confirmDeleteIncubation'
                 onCancel={() => setIsDeleteModalOpen(false)}
                 okType='danger'
                 okText='Delete'

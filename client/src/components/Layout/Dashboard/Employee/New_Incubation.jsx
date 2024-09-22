@@ -136,7 +136,7 @@ const New_Incubation = ({ usersArray, batch, refetchBatches }) => {
                 </Form.Item>
             </Form>
 
-            <Card title={'Available Batches.'} loading={newBatch.length < 0} style={{ width: '60%' }}>
+            <Card title='Available Batches.' loading={newBatch.length < 0} style={{ width: '60%' }}>
                 <p>Click any to select</p>
                 <Table dataSource={newBatch} columns={newBatchColumns} key='newBatchesTable' rowKey='batchId' pagination={{ pageSize: 5 }} onRow={(record) => ({ onClick: () => setSelectedBatch(record.batchId) })} />
             </Card>

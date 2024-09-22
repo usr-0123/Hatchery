@@ -7,7 +7,7 @@ import { convertDateToUIFormat } from '../../../../helpers/dateConversion.js';
 const Hatchery_Records = ({batch}) => {
     const [hatchRecords, setHatchRecords] = useState();
     const {data: hatchRecordsData, refetch: refetchHatchRecords} = useFetchHatchRecordsQuery();
-
+    
     useEffect(() => {
         if (hatchRecordsData?.data) {
             setHatchRecords(hatchRecordsData.data);
@@ -22,7 +22,7 @@ const Hatchery_Records = ({batch}) => {
             title: 'Date Hatched',
             dataIndex: 'dateHatched',
             key: 'dateHatched',
-            render: ((dateHatched) => convertDateToUIFormat(dateHatched))
+            render: (dateHatched) => convertDateToUIFormat(dateHatched)
         },{
             title: 'Total Eggs',
             dataIndex: ('hatchedChicks','unHatchedEggs'),
@@ -40,7 +40,7 @@ const Hatchery_Records = ({batch}) => {
     ]
 
   return (
-    <Table key='hatchRecordsTable' rowKey='hatchRecordid' columns={columns} dataSource={hatchRecords} pagination={{pageSize: 5}} />
+    <Table key='hatchRecordsTable' rowKey='hatchRecordId' columns={columns} dataSource={hatchRecords} pagination={{pageSize: 5}} />
   )
 }
 

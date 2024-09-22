@@ -22,6 +22,7 @@ export const salesApis = createApi({
             query: (sale) => ({
                 url: '/sales/new',
                 body: sale,
+                method: 'POST',
             }),
             invalidatesTags: ['Sales'],
         }),
@@ -55,6 +56,7 @@ export const salesApis = createApi({
             query: ({ editorId, saleId, editValues }) => ({
                 url: `/sales/update/${editorId}/${saleId}`,
                 body: editValues,
+                method: 'PATCH',
             }),
             invalidatesTags: ['Sales'],
         }),
@@ -62,6 +64,7 @@ export const salesApis = createApi({
         deleteSale: builder.mutation({
             query: ({ editorId, saleId }) => `/sales/delete/${editorId}/${saleId}`,
             invalidatesTags: ['Sales'],
+            method: 'DELETE',
         }),
     }),
 });
