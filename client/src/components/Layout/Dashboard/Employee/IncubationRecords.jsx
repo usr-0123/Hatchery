@@ -9,6 +9,7 @@ import { interceptor } from '../../../../services/Interceptor.js';
 import { decodeToken } from '../../../../helpers/token.js';
 import { useCreateRecordMutation } from '../../../../features/apis/hatchRecordsApis.js';
 import { useUpdateBatchMutation } from '../../../../features/apis/batchApis.js';
+import { incubationOptions } from '../../../../helpers/globalStrings.js';
 
 const columns = [
     {
@@ -146,22 +147,6 @@ const IncubationRecords = ({ batch }) => {
 
     }, [incubationData, refetchincubations]);
 
-    const incubationOptions = [
-        {
-            value: null,
-            label: 'Select...'
-        }, {
-            value: 'Ongoing',
-            label: 'Ongoing'
-        }, {
-            value: 'Hatched',
-            label: 'Hatched'
-        }, {
-            value: 'Spoilt',
-            label: 'Spoilt'
-        },
-    ]
-
     return (
         <>
             <Table
@@ -194,7 +179,7 @@ const IncubationRecords = ({ batch }) => {
             </Modal>
             <Modal
                 key='editincubationRecordsModal'
-                title='Edit incubation records.'
+                title='Edit incubation record.'
                 loading={!selectedObject}
                 open={isEditModalOpen && selectedObject}
                 onCancel={() => setEditIsModalOpen(false)}

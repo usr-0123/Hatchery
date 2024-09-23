@@ -44,16 +44,17 @@ const New_Sales = () => {
                 onFinish={(e) => onFinish(e)}
                 form={form}
                 style={{ width: '50%' }}
+                layout='vertical'
             >
-                <Form.Item name='chickPrice' >
+                <Form.Item name='chickPrice' label='Product' >
                     <Select defaultValue='Select product...' options={productPrice}  rules={[{ required: true, message: 'Chick price is required.'}]} />
                 </Form.Item>
 
-                <Form.Item name='saleDate' rules={[{ required: true, message: 'Sale date is required.' }]} >
+                <Form.Item name='saleDate' label='Sale Date' rules={[{ required: true, message: 'Sale date is required.' }]} >
                     <DatePicker placeholder='Select sales date' style={{ width: '100%' }} />
                 </Form.Item>
 
-                <Form.Item name='quantitySold' rules={[{ required: true, message: 'Quantity sold is required.' }]} >
+                <Form.Item name='quantitySold' label='Quantity Sold' rules={[{ required: true, message: 'Quantity sold is required.' }]} >
                     <InputNumber placeholder='Please enter the number of chick sold' style={{ width: '100%' }} />
                 </Form.Item>
 

@@ -1,5 +1,5 @@
-export const createNewSaleQuery = `INSERT INTO tbl_sales (saleId, batchId, chickId, saleDate, quantitySold, chickPrice, totalAmount)
-VALUES (@saleId, @batchId, @chickId, @saleDate, @quantitySold, @chickPrice, @totalAmount)`;
+export const createNewSaleQuery = `INSERT INTO tbl_sales (saleId, saleDate, quantitySold, price, totalAmount)
+VALUES (@saleId, @saleDate, @quantitySold, @price, @totalAmount)`;
 
 export const fetchSalesQuery = `SELECT * FROM tbl_sales `;
 

@@ -2,15 +2,23 @@ import { v4 } from "uuid";
 import { conflict, dataFound, sendBadRequest, sendCreated, sendDeleteSuccess, sendNotFound, sendServerError, unAuthorized } from "../helpers/httpStatusCodes.js";
 import { fetchUsersService } from "../services/usersServices.js";
 import { createNewSaleService, deleteSalesService, fetchSalesService, updateSalesService } from "../services/salesServices.js";
+import { newSaleValidator, updateSaleValidator } from "../validators/salesValidators.js";
+import { userRoles } from "../../../client/src/helpers/globalStrings.js";
 
 export const createNewSaleController = async (req, res) => {
 
     try {
-        const { batchId, chickId, saleDate, quantitySold, chickPrice } = req.body;
+        const validation = newSaleValidator(req.body);
+
+        if (validation.error) {
+            return sendServerError(res, validation.error.message);
+        };
+
+        const { saleDate, quantitySold, price } = req.body;
 
         const saleExists = await fetchSalesService();
 
-        const exactSales = saleExists.recordset.length > 0 && saleExists.recordset.filter(object => object.batchId === batchId && object.chickId === chickId && object.saleDate === saleDate && object.chickPrice === chickPrice);
+        const exactSales = saleExists.recordset.length > 0 && saleExists.recordset.filter(object => object.saleDate === saleDate && object.price === price);
 
         if (exactSales.length > 0) {
             return conflict(res, 'This sales record already exists.');
@@ -18,9 +26,9 @@ export const createNewSaleController = async (req, res) => {
 
         const saleId = v4();
 
-        const total = quantitySold * chickPrice
+        const total = quantitySold * price
 
-        const sale = { saleId, batchId, chickId, saleDate, quantitySold, chickPrice, totalAmount: total };
+        const sale = { saleId, saleDate, quantitySold, price, totalAmount: total };
 
         const result = await createNewSaleService(sale);
 
@@ -85,12 +93,18 @@ export const updateSalesController = async (req, res) => {
 
     let permission = false;
 
-    const editor = await fetchUsersService({ userId: req.params.editorId });
+    const editor = await fetchUsersService({ userId: req?.params?.editorId });
 
     if (editor?.recordset?.length > 0 && req.params.editorId === editor?.recordset[0].userId) {
         permission = true;
-    } else if (editor?.recordset?.length > 0 && editor?.recordset[0].userRole === 'Admin') {
+    } else if (editor?.recordset?.length > 0 && editor?.recordset[0].userRole === (userRoles.admin.value || userRoles.employee.value)) {
         permission = true;
+    };
+
+    const validation = updateSaleValidator(req.body);
+
+    if (validation.error) {
+        return sendServerError(res, validation.error.message);
     };
 
     const availableEntry = await fetchSalesService(req.params);
@@ -101,13 +115,13 @@ export const updateSalesController = async (req, res) => {
             try {
                 let editable = req.body;
 
-                if (req.body?.chickPrice) {
-                    const total = req.body.chickPrice * availableEntry.recordset[0].quantitySold;
+                if (req.body?.price) {
+                    const total = req.body.price * availableEntry.recordset[0].quantitySold;
                     editable = { ...req.body, totalAmount: total };
                 };
 
                 if (req.body?.quantitySold) {
-                    const total = req.body.quantitySold * availableEntry.recordset[0].chickPrice;
+                    const total = req.body.quantitySold * availableEntry.recordset[0].price;
                     editable = { ...req.body, totalAmount: total };
                 };
 
@@ -124,7 +138,7 @@ export const updateSalesController = async (req, res) => {
                 return sendServerError(res, error);
             };
         } else {
-            return unAuthorized(res, 'You are not allowed to edit this record.')
+            return unAuthorized(res, 'You need to be an admin to edit this record.')
         };
 
     } else {
@@ -136,11 +150,11 @@ export const deleteSalesController = async (req, res) => {
 
     let permission = false;
 
-    const editor = await fetchUsersService({ userId: req.params.editorId });
-    
+    const editor = await fetchUsersService({ userId: req?.params?.editorId });
+
     if (editor?.recordset?.length > 0 && req.params.editorId === editor?.recordset[0].userId) {
         permission = true;
-    } else if (editor?.recordset?.length > 0 && editor?.recordset[0].userRole === 'Admin') {
+    } else if (editor?.recordset?.length > 0 && editor?.recordset[0].userRole === (userRoles.admin.value || userRoles.employee.value)) {
         permission = true;
     };
 
@@ -163,7 +177,7 @@ export const deleteSalesController = async (req, res) => {
                 sendServerError(res, error);
             };
         } else {
-            return unAuthorized(res, 'You are not allowed to delete this sale record.')
+            return unAuthorized(res, 'You need to be an admin to edit this record.')
         };
 
     } else {

@@ -6,11 +6,9 @@ export const createNewSaleService = async (params) => {
     try {
         const result = await poolrequest()
             .input('saleId', sql.VarChar, params.saleId)
-            .input('batchId', sql.VarChar, params.batchId)
-            .input('chickId', sql.VarChar, params.chickId)
             .input('saleDate', sql.Date, params.saleDate)
             .input('quantitySold', sql.Int, params.quantitySold)
-            .input('chickPrice', sql.Decimal, params.chickPrice)
+            .input('price', sql.Decimal, params.price)
             .input('totalAmount', sql.Decimal, params.totalAmount)
 
             .query(createNewSaleQuery);
@@ -29,14 +27,6 @@ export const fetchSalesService = async (params) => {
     } else {
         if (params.saleId) {
             query = fetchSalesQuery + `WHERE saleId = '${params.saleId}'`;
-        };
-
-        if (params.batchId) {
-            query = fetchSalesQuery + `WHERE batchId = '${params.batchId}'`;
-        };
-
-        if (params.chickId) {
-            query = fetchSalesQuery + `WHERE chickId = '${params.chickId}'`;
         };
 
         if (params.saleDate) {

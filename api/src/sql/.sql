@@ -95,24 +95,6 @@ CREATE TABLE tbl_Chicks
 
 drop table tbl_Chicks;
 
-
-CREATE TABLE tbl_Sales
-(
-    saleId VARCHAR(255) PRIMARY KEY,
-    batchId VARCHAR(255),
-    chickId VARCHAR(255),
-    saleDate DATE,
-    quantitySold INT,
-    chickPrice DECIMAL(10, 2),
-    totalAmount DECIMAL(10, 2),
-    FOREIGN KEY (chickId) REFERENCES tbl_Chicks(chickId),
-    FOREIGN KEY (batchId) REFERENCES tbl_Batches(batchId)
-    ON UPDATE CASCADE
-    ON DELETE CASCADE
-);
-
-drop table tbl_sales;
-
 CREATE TABLE tbl_ProductPrices (
     productPriceId VARCHAR(255) PRIMARY KEY, -- Auto-incremented unique identifier
     product_name VARCHAR(255) NOT NULL, -- Product name
@@ -122,6 +104,18 @@ CREATE TABLE tbl_ProductPrices (
 );
 
 drop TABLE product_Prices;
+
+CREATE TABLE tbl_Sales
+(
+    saleId VARCHAR(255) PRIMARY KEY,
+    saleDate DATE,
+    quantitySold INT,
+    price DECIMAL(10, 2),
+    totalAmount DECIMAL(10, 2),
+);
+
+drop table tbl_sales;
+
 
 -- We have farmers and hatchery cooperative society
 -- The coop society has staff and admins

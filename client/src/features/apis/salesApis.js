@@ -62,9 +62,11 @@ export const salesApis = createApi({
         }),
 
         deleteSale: builder.mutation({
-            query: ({ editorId, saleId }) => `/sales/delete/${editorId}/${saleId}`,
+            query: ({ editorId, saleId }) => ({
+                url: `/sales/delete/${editorId}/${saleId}`,
+                method: 'DELETE',
+            }),
             invalidatesTags: ['Sales'],
-            method: 'DELETE',
         }),
     }),
 });
