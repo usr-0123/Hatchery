@@ -56,9 +56,11 @@ export const hatchApi = createApi({
         }),
 
         deleteHatch: builder.mutation({
-            query: ({ editorId, hatchRecordId }) => `/hatchRecord/delete/${editorId}/${hatchRecordId}`,
+            query: ({ editorId, hatchRecordId }) => ({
+                url: `/hatchRecord/delete/${editorId}/${hatchRecordId}`,
+                method: 'DELETE',
+            }),
             invalidatesTags: ['HatchRecord'],
-            method: 'DELETE',
         }),
     }),
 });

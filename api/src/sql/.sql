@@ -50,21 +50,19 @@ CREATE TABLE tbl_Eggs
 
 drop table tbl_Eggs
 
+-- edited and updated table
 CREATE TABLE tbl_Incubation
 (
     incubationId VARCHAR(255) PRIMARY KEY,
-    batchId VARCHAR(255),
     startDate DATE,
     hatchDate DATE,
-    IncubationState VARCHAR(255), -- Options are ongoing (default) or completed.
-    FOREIGN KEY (batchId) REFERENCES tbl_Batches(batchId)
-    ON UPDATE CASCADE
-    ON DELETE CASCADE 
+    totalEggs INT,
+    incubationState VARCHAR(255) DEFAULT 'Ongoing' -- Options are ongoing (default) or completed.
 );
 
 drop table tbl_incubation
 
-
+-- the batch info to be removed
 CREATE TABLE tbl_Hatchrecords
 (
     hatchRecordId VARCHAR(255) PRIMARY KEY,
@@ -78,7 +76,6 @@ CREATE TABLE tbl_Hatchrecords
 );
 
 drop table tbl_Hatchrecords;
-
 
 CREATE TABLE tbl_Chicks
 (
@@ -95,6 +92,7 @@ CREATE TABLE tbl_Chicks
 
 drop table tbl_Chicks;
 
+-- untouched, nothing to change
 CREATE TABLE tbl_ProductPrices (
     productPriceId VARCHAR(255) PRIMARY KEY, -- Auto-incremented unique identifier
     product_name VARCHAR(255) NOT NULL, -- Product name
@@ -105,6 +103,7 @@ CREATE TABLE tbl_ProductPrices (
 
 drop TABLE product_Prices;
 
+-- updated table
 CREATE TABLE tbl_Sales
 (
     saleId VARCHAR(255) PRIMARY KEY,

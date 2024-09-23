@@ -63,6 +63,7 @@ const Sales_Records = () => {
         const editValues = filterObjectByValues(values);
         const response = interceptor({ params: await updateSale({ editorId: user?.userId, saleId: selectedObject.saleId, editValues }), type: 'Mutation' })
         if (response) {
+            form.resetFields();
             setEditModalOpen(false);
             refetchSales();
             setIsModalOpen(false);

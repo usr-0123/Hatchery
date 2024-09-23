@@ -5,9 +5,9 @@ export const createNewIncubationService = async (params) => {
     try {
         const result = await poolrequest()
             .input('incubationId', sql.VarChar, params.incubationId)
-            .input('batchId', sql.VarChar, params.batchId)
             .input('startDate', sql.Date, params.startDate)
             .input('hatchDate', sql.Date, params.hatchDate)
+            .input('totalEggs', sql.Int, params.totalEggs)
             .input('IncubationState', sql.VarChar, params.IncubationState)
             .query(createNewIncubationQuery);
 
@@ -26,10 +26,7 @@ export const fetchIncubationsService = async (params) => {
         if (params.incubationId) {
             query = fetchIncubationsQuery + `WHERE incubationId = '${params.incubationId}'`;
         };
-        if (params.batchId) {
-            query = fetchIncubationsQuery + `WHERE batchId = '${params.batchId}'`;
-        };
-
+        
         if (params.startDate) {
             query = fetchIncubationsQuery + `WHERE startDate = '${params.startDate}'`;
         };

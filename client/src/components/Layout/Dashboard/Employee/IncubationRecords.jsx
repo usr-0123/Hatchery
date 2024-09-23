@@ -8,20 +8,22 @@ import { filterObjectByValues } from '../../../../helpers/editObjectProperties.j
 import { interceptor } from '../../../../services/Interceptor.js';
 import { decodeToken } from '../../../../helpers/token.js';
 import { useCreateRecordMutation } from '../../../../features/apis/hatchRecordsApis.js';
-import { useUpdateBatchMutation } from '../../../../features/apis/batchApis.js';
 import { incubationOptions } from '../../../../helpers/globalStrings.js';
 
 const columns = [
-    {
-        title: 'Incubation State',
-        dataIndex: 'IncubationState',
-        key: 'IncubationState',
-    },
     {
         title: 'Start Date',
         dataIndex: 'startDate',
         key: 'startDate',
         render: (startDate) => convertDateToUIFormat(startDate),
+    }, {
+        title: 'Total Eggs',
+        dataIndex: 'totalEggs',
+        key: 'totalEggs',
+    }, {
+        title: 'Incubation State',
+        dataIndex: 'incubationState',
+        key: 'incubationState',
     }, {
         title: 'Hatch Date',
         dataIndex: 'hatchDate',
@@ -32,14 +34,13 @@ const columns = [
 
 const user = decodeToken();
 
-const IncubationRecords = ({ batch }) => {
+const IncubationRecords = () => {
 
     const [incubationArray, setIncubationArray] = useState([]);
 
     const { data: incubationData, refetch: refetchincubations, isLoading: fetchingIncubationRecords } = useFetchIncubationQuery();
 
     const [selectedObject, setSelectedObject] = useState();
-    const [selectedBatchObject, setSelectedBatchObject] = useState();
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleSelect = (values) => {
@@ -48,52 +49,30 @@ const IncubationRecords = ({ batch }) => {
     };
 
     const [isEditModalOpen, setEditIsModalOpen] = useState(false);
-    const [isEditValues, setEditIsEditValues] = useState({});
-    const [isHatchValues, setIsHatchValues] = useState({});
-    const [isHatched, setIsHatched] = useState(false);
+    const [incubationState, setIncubationState] = useState();
     const [editIncubation, { isLoading: editingIncubation }] = useUpdateIncubationMutation();
-    const [updateBatch, {isLoading: updatingBatch}] = useUpdateBatchMutation();
-    const [newHatch, { isLoading: creatingHatch }] = useCreateRecordMutation();
+    const [newHatchRecord, { isLoading: creatingHatch }] = useCreateRecordMutation();
     const [form] = Form.useForm();
 
-    useEffect(() => {
-        if (isEditValues?.IncubationState === "Hatched") {
-            setIsHatched(true);
-        } else {
-            setIsHatched(false);
-        };
+    const handleEdit = async (value) => {
+        const notNull = filterObjectByValues(value);
 
-        if (selectedObject?.batchId) {
-            const batchObject = batch.filter(object => object?.batchId === selectedObject.batchId);
+        if (incubationState && incubationState === "Hatched") {
 
-            if (batchObject.length > 0) {
-                setSelectedBatchObject(batchObject[0])
-            } else {
-                setSelectedBatchObject(null);
-            };
-        } else {
-            setSelectedBatchObject(null);
-        };
-    }, [isEditValues, isHatchValues]);
+            if (selectedObject && notNull?.hatchedChicks) {
 
-    const handleEdit = async () => {
-        if (isHatched) {
-            if (selectedObject?.batchId) {
-                const { hatchedChicks, dateHatched } = isHatchValues;
                 const hatch = {
-                    batchId: selectedObject?.batchId,
-                    unHatchedEggs: +selectedBatchObject?.totalEggs - +hatchedChicks,
-                    hatchedChicks,
-                    dateHatched
+                    hatchedChicks: notNull?.hatchedChicks,
+                    unHatchedEggs: +selectedObject?.totalEggs - +notNull?.hatchedChicks,
+                    dateHatched: notNull?.dateHatched
                 };
-                const hatchNotNull = filterObjectByValues(hatch);
-                if (hatchNotNull) {
-                    const result = { params: await newHatch(hatchNotNull), type: 'Mutation' };
-                    
+
+                if (hatch) {
+                    const result = { params: await newHatchRecord(hatch), type: 'Mutation' };
+
                     if (result) {
-                        const incubationResponse = { params: await editIncubation({ editorId: user?.userId, incubationId: selectedObject.incubationId, editedValues: {IncubationState: 'Hatched'}}), type: 'Mutation' };
-                        const batchResponse = { params: await updateBatch({ editorId: user?.userId, batchId: selectedObject.batchId, editedValues: {batchStatus: 'Hatched'}}), type: 'Mutation' };
-                        if (incubationResponse && batchResponse) {
+                        const incubationResponse = { params: await editIncubation({ editorId: user?.userId, incubationId: selectedObject.incubationId, editedValues: { IncubationState: 'Hatched' } }), type: 'Mutation' };
+                        if (incubationResponse) {
                             form.resetFields();
                             setEditIsModalOpen(false);
                             refetchincubations();
@@ -104,8 +83,8 @@ const IncubationRecords = ({ batch }) => {
             };
 
         } else {
+
             if (selectedObject.incubationId) {
-                const notNull = filterObjectByValues(isEditValues);
                 const response = interceptor({ params: await editIncubation({ editorId: user?.userId, incubationId: selectedObject.incubationId, editedValues: notNull }), type: 'Mutation' });
                 if (response) {
                     form.resetFields();
@@ -134,7 +113,7 @@ const IncubationRecords = ({ batch }) => {
 
     useEffect(() => {
         if (incubationData?.data) {
-            const ongoingIncubations = incubationData?.data.filter(object => object.IncubationState === 'Ongoing');
+            const ongoingIncubations = incubationData?.data.filter(object => object.incubationState === 'Ongoing');
             if (ongoingIncubations.length > 0) {
                 setIncubationArray(ongoingIncubations);
             } else {
@@ -159,6 +138,7 @@ const IncubationRecords = ({ batch }) => {
                 pagination={{ pageSize: 5 }}
                 rowKey="IncubationId"
             />
+
             <Modal
                 key='selectedIncubationModal'
                 title='Selected Incubation'
@@ -166,6 +146,7 @@ const IncubationRecords = ({ batch }) => {
                 open={isModalOpen && selectedObject}
                 onCancel={() => setIsModalOpen(false)}
                 centered
+                width={'70%'}
                 footer={[
                     <Button key='editIncBtn' onClick={() => setEditIsModalOpen(true)} >Edit</Button>,
                     <Button key='deleteIncBtn' danger onClick={() => setIsDeleteModalOpen(true)} >Delete</Button>
@@ -174,9 +155,11 @@ const IncubationRecords = ({ batch }) => {
                 <Descriptions bordered column={2} >
                     <Descriptions.Item label='Start Date' >{selectedObject?.startDate ? convertDateToUIFormat(selectedObject.startDate) : 'N/A'}</Descriptions.Item>
                     <Descriptions.Item label='Hatch Date' >{selectedObject?.hatchDate ? convertDateToUIFormat(selectedObject.hatchDate) : 'N/A'}</Descriptions.Item>
-                    <Descriptions.Item label='Incubation State' >{selectedObject?.IncubationState || 'N/A'}</Descriptions.Item>
+                    <Descriptions.Item label='Incubation State' >{selectedObject?.incubationState || 'N/A'}</Descriptions.Item>
+                    <Descriptions.Item label='Total Eggs' >{selectedObject?.totalEggs || '0'}</Descriptions.Item>
                 </Descriptions>
             </Modal>
+
             <Modal
                 key='editincubationRecordsModal'
                 title='Edit incubation record.'
@@ -184,54 +167,51 @@ const IncubationRecords = ({ batch }) => {
                 open={isEditModalOpen && selectedObject}
                 onCancel={() => setEditIsModalOpen(false)}
                 centered
-                onOk={handleEdit}
-                okButtonProps={{ disabled: editingIncubation, loading: editingIncubation || updatingBatch }}
+                onOk={form.submit}
+                okButtonProps={{ disabled: editingIncubation || creatingHatch, loading: editingIncubation || creatingHatch }}
                 okText='Update'
             >
                 <Form
                     form={form}
+                    onFinish={handleEdit}
                     key='editIncubationForm'
+                    layout='vertical'
                 >
                     <Form.Item
-                        name='IncubationState'
+                        name='incubationState'
+                        label='Incubation State'
                     >
-                        <Select placeholder={selectedObject && selectedObject.IncubationState ? selectedObject.IncubationState : 'Select incubation State'} onChange={(value) => setEditIsEditValues({ ...isEditValues, IncubationState: value })} options={incubationOptions} />
+                        <Select
+                            placeholder={selectedObject && selectedObject.incubationState ? selectedObject.incubationState : 'Select incubation State'}
+                            onChange={(value) => setIncubationState(value)}
+                            options={incubationOptions}
+                        />
                     </Form.Item>
                     <Form.Item
                         name='startDate'
-                        hidden={isHatched}
+                        label='Start Date'
                     >
-                        <DatePicker key='startDateEditInput' placeholder={selectedObject && selectedObject.startDate ? convertDateToUIFormat(selectedObject.startDate) : 'Start date'} onChange={(value) => setEditIsEditValues({ ...isEditValues, startDate: value })} style={{ width: '100%' }} />
+                        <DatePicker key='startDateEditInput' placeholder={selectedObject && selectedObject.startDate ? convertDateToUIFormat(selectedObject.startDate) : 'Start date'} style={{ width: '100%' }} />
                     </Form.Item>
                     <Form.Item
-                        name='hatchDate'
-                        hidden={isHatched}
+                        name={incubationState && incubationState === "Hatched" ? 'dateHatched' : 'hatchDate'}
+                        label='Hatch Date'
                     >
-                        <DatePicker key='hatchDateEditInput' placeholder={selectedObject && selectedObject.hatchDate ? convertDateToUIFormat(selectedObject.hatchDate) : 'Hatch date'} onChange={(value) => setEditIsEditValues({ ...isEditValues, hatchDate: value })} style={{ width: '100%' }} />
+                        <DatePicker key='hatchDateEditInput' placeholder={selectedObject?.hatchDate ? convertDateToUIFormat(selectedObject.hatchDate) : 'Hatch date'} style={{ width: '100%' }} />
                     </Form.Item>
                     <Form.Item
-                        name='dateHatched'
-                        hidden={!isHatched}
+                        name={incubationState && incubationState === "Hatched" ? 'hatchedChicks' : 'totalEggs'}
+                        label={incubationState && incubationState === "Hatched" ? 'Hatched Chicks' : 'Total Eggs'}
                         rules={[{
-                            required: true,
-                            message: 'The hatch date is required.'
+                            required: incubationState && incubationState === 'Hatched',
+                            message: 'Number of hatched chicks required'
                         }]}
                     >
-                        <DatePicker key='dateHatchedEditInput' placeholder={'Enter hatched date'} onChange={(value) => setIsHatchValues({ ...isHatchValues, dateHatched: value })} style={{ width: '100%' }} />
-                    </Form.Item>
-                    <Form.Item
-                        name='hatchedChicks'
-                        rules={[{
-                            required: true,
-                            message: 'The number of hatched chicks is required.'
-                        }]}
-                        hidden={!isHatched}
-                    >
-
-                        <InputNumber max={selectedBatchObject?.totalEggs} placeholder={'Enter number of hatched chicks'} onChange={(value) => setIsHatchValues({ ...isHatchValues, hatchedChicks: value })} style={{ width: '100%' }} />
+                        <InputNumber max={selectedObject?.totalEggs} placeholder={incubationState && incubationState === 'Hatched' ? 'Enter the number of hatched chicks.' : selectedObject?.totalEggs || 'Enter number of eggs.'} style={{ width: '100%' }} />
                     </Form.Item>
                 </Form>
             </Modal>
+
             <Modal
                 title='Confirm deleting this incubation record?'
                 open={isDeleteModalOpen}

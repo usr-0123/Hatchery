@@ -6,11 +6,11 @@ import { createNewIncubationService, deleteIncubationService, fetchIncubationsSe
 export const createNewIncubationController = async (req, res) => {
 
     try {
-        const { batchId, startDate, hatchDate, IncubationState } = req.body;
+        const { startDate, hatchDate, totalEggs, IncubationState } = req.body;
 
         const incubationExists = await fetchIncubationsService();
 
-        const exactIncubation = incubationExists.recordset.length > 0 && incubationExists.recordset.filter(object => object.batchId === batchId && object.startDate === startDate && object.hatchDate === hatchDate && object.IncubationState === IncubationState);
+        const exactIncubation = incubationExists.recordset.length > 0 && incubationExists.recordset.filter(object => object.startDate === startDate && object.hatchDate === hatchDate && object.totalEggs === totalEggs && object.IncubationState === IncubationState);
 
         if (exactIncubation.length > 0) {
             return conflict(res, 'This incubation record already exists.');
@@ -18,7 +18,7 @@ export const createNewIncubationController = async (req, res) => {
 
         const incubationId = v4();
 
-        const incubation = { incubationId, batchId, startDate, hatchDate, IncubationState: IncubationState ? IncubationState : 'Ongoing' };
+        const incubation = { incubationId, startDate, hatchDate, totalEggs, IncubationState: IncubationState ? IncubationState : 'Ongoing' };
 
         const result = await createNewIncubationService(incubation);
 

@@ -40,11 +40,11 @@ const Employee_Incubation = () => {
     {
       key: 'employee-general-tab',
       label: 'New Incubation',
-      children: <New_Incubation usersArray={usersArray} batch={batchesData} refetchBatches={refetchBatches} />,
+      children: <New_Incubation />,
     }, {
       key: 'employee-incubations',
       label: 'Incubation Records',
-      children: <IncubationRecords batch={batchesData} />,
+      children: <IncubationRecords />,
     }
   ];
 

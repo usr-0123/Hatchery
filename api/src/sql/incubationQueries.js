@@ -1,5 +1,5 @@
-export const createNewIncubationQuery = `INSERT INTO tbl_incubation (incubationId, batchId, startDate, hatchDate, IncubationState)
-VALUES (@incubationId, @batchId, @startDate, @hatchDate, @IncubationState)`;
+export const createNewIncubationQuery = `INSERT INTO tbl_incubation (incubationId, startDate, hatchDate, totalEggs, incubationState)
+VALUES (@incubationId, @startDate, @hatchDate, @totalEggs, @incubationState)`;
 
 export const fetchIncubationsQuery = `SELECT * FROM tbl_incubation `;
 
