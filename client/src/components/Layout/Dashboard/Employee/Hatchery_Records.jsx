@@ -61,7 +61,7 @@ const Hatchery_Records = ({ batch }) => {
 
     const handleEdit = async (params) => {
         const notNull = filterObjectByValues(params);
-        const response = interceptor({ params: await updateHatch({ editorId: user?.userId, hatchRecordId: selectedObject.hatchRecordId, editedValues: notNull }), type: 'Mutation' })
+        const response = interceptor({ params: await updateHatch({ editorId: user?.userId, hatchRecordId: selectedObject?.hatchRecordId, editedValues: notNull }), type: 'Mutation' })
         if (response) {
             form.resetFields();
             setEditModalOpen(false);
@@ -72,7 +72,7 @@ const Hatchery_Records = ({ batch }) => {
 
     const onDelete = async () => {
         if (selectedObject?.hatchRecordId && user?.userId) {
-            const response = interceptor({ params: await deletehatch({ editorId: user?.userId, hatchRecordId: selectedObject.hatchRecordId }), type: 'Mutation' });
+            const response = interceptor({ params: await deletehatch({ editorId: user?.userId, hatchRecordId: selectedObject?.hatchRecordId }), type: 'Mutation' });
             if (response) {
                 setIsDeleteModalOpen(false);
                 refetchHatchRecords();

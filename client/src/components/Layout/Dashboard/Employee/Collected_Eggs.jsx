@@ -24,7 +24,7 @@ const Collected_Eggs = ({ usersArray }) => {
 
     useEffect(() => {
         if (batchData?.data) {
-            const recievedBatch = batchData.data.filter(object => object.batchStatus === 'recieved');
+            const recievedBatch = batchData.data.filter(object => object?.batchStatus === 'recieved');
 
             if (recievedBatch.length > 0) {
                 setEggsData(recievedBatch);
@@ -45,7 +45,7 @@ const Collected_Eggs = ({ usersArray }) => {
     const handleDeleteBatch = async () => {
 
         if (selectedObject?.batchId && user) {
-            const response = interceptor({ params: await deleteBatch({ editorId: user?.userId, batchId: selectedObject.batchId }), type: 'Mutation' });
+            const response = interceptor({ params: await deleteBatch({ editorId: user?.userId, batchId: selectedObject?.batchId }), type: 'Mutation' });
 
             if (response) {
                 setIsDeleteModal(false);

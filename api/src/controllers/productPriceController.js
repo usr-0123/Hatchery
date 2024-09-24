@@ -80,7 +80,7 @@ export const updateProductPriceController = async (req, res) => {
 
     const editor = await fetchUsersService({ userId: req.params.editorId });
 
-    if (editor?.recordset?.length > 0 && editor.recordset[0].userRole === 'Admin') {
+    if (editor?.recordset?.length > 0 && editor.recordset[0].userRole === 'Admin' || editor.recordset[0].userRole === 'Employee') {
         permission = true;
     };
 
@@ -117,7 +117,7 @@ export const deleteProductPriceController = async (req, res) => {
 
     const editor = await fetchUsersService({ userId: req.params.editorId });
 
-    if (editor?.recordset?.length > 0 && editor.recordset[0].userRole === 'Admin') {
+    if (editor?.recordset?.length > 0 && editor.recordset[0].userRole === 'Admin' || editor.recordset[0].userRole === 'Employee') {
         permission = true;
     };
 

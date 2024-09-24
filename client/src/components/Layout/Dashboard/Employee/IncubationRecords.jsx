@@ -71,7 +71,7 @@ const IncubationRecords = () => {
                     const result = { params: await newHatchRecord(hatch), type: 'Mutation' };
 
                     if (result) {
-                        const incubationResponse = { params: await editIncubation({ editorId: user?.userId, incubationId: selectedObject.incubationId, editedValues: { IncubationState: 'Hatched' } }), type: 'Mutation' };
+                        const incubationResponse = interceptor({ params: await editIncubation({ editorId: user?.userId, incubationId: selectedObject.incubationId, editedValues: { IncubationState: 'Hatched' } }), type: 'Mutation' });
                         if (incubationResponse) {
                             form.resetFields();
                             setEditIsModalOpen(false);

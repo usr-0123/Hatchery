@@ -85,9 +85,7 @@ export const updateHatchController = async (req, res) => {
 
     const editor = await fetchUsersService({ userId: req.params.editorId });
 
-    if (editor?.recordset?.length > 0 && req.params.editorId === editor.recordset[0].userId) {
-        permission = true;
-    } else if (editor?.recordset?.length > 0 && editor.recordset[0].userRole === 'Admin') {
+    if (editor?.recordset?.length > 0 && editor?.recordset[0]?.userRole === 'Admin' || editor?.recordset[0]?.userRole === 'Employee') {
         permission = true;
     };
 
@@ -124,9 +122,7 @@ export const deleteHatchRecordController = async (req, res) => {
 
     const editor = await fetchUsersService({ userId: req.params.editorId });
     
-    if (editor?.recordset?.length > 0 && req.params.editorId === editor.recordset[0].userId) {
-        permission = true;
-    } else if (editor?.recordset?.length > 0 && editor.recordset[0].userRole === 'Admin') {
+    if (editor?.recordset?.length > 0 && editor.recordset[0].userRole === 'Admin' || editor.recordset[0].userRole === 'Employee') {
         permission = true;
     };
 

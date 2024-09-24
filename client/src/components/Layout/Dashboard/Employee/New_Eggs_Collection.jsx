@@ -26,7 +26,7 @@ const New_Eggs_Collection = ({ usersArray }) => {
 
     const options = usersArray?.map((object) => ({
         value: object.userId,
-        label: `${object.firstName} ${object.lastName}`,
+        label: `${object.firstName} ${object.lastName} - ${object.userEmail}`,
     }));
 
     const [createBatch, { isLoading: creatingBatch }] = useCreateBatchMutation();
