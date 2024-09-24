@@ -1,64 +1,73 @@
 import React, { useEffect, useState } from 'react'
 
-import { Gauge, gaugeClasses } from '@mui/x-charts/Gauge';
-import { Card, Col, Statistic } from 'antd';
+import { BarChart } from '@mui/x-charts/BarChart';
+import { axisClasses } from '@mui/x-charts/ChartsAxis';
 
-import { useFetchSaleQuery } from '../../../../features/apis/salesApis.js';
+import { Button, DatePicker } from 'antd';
 
-const Admin_SalesDashboard = () => {
-  const [sales, setSales] = useState([]);
+import { DownloadOutlined } from '@ant-design/icons';
+
+import { formatSalesDataByMonth } from '../../../../helpers/eggsCount.js';
+
+const Admin_SalesDashboard = ({ batch, recieved, sales, hatchRecords }) => {
+  const [year, setYear] = useState(2024);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { data: salesData, refetch: refetchSales } = useFetchSaleQuery();
+  const onChange = (date, dateString) => {
+    const selectedYear = parseInt(dateString, 10);
+    setYear(selectedYear);
+  };
 
-  useEffect(() => {
-    if (salesData?.data) {
-      setSales(salesData.data);
-    } else {
-      setSales([]);
-      refetchSales();
-    };
-  }, [salesData]);
+  const chartSetting = {
+    yAxis: [
+      {
+        label: 'Amount (number)',
+      },
+    ],
+    width: 700,
+    height: 300,
+    sx: {
+      [`.${axisClasses.left} .${axisClasses.label}`]: {
+        transform: 'translate(-30px, 0)',
+      },
+    },
+  };
 
+  const transformedData = formatSalesDataByMonth(sales, year);
+  
   return (
     <>
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }} >
-        <Col style={{ margin: '20px 0 0 0' }} >
-          <Card hoverable onClick={() => setIsModalOpen(true)}>
-            <Gauge width={150} height={150} value={sales?.length} text={`${sales?.length} chicks`} startAngle={-135} endAngle={135} cornerRadius="50%" />
-            <p style={{ width: '100%', textAlign: 'center' }}>Total number of Sales.</p>
-          </Card>
-        </Col>
-        <Col style={{ margin: '20px 0 0 0' }} >
-          <Card hoverable onClick={() => setIsModalOpen(true)}>
-            <Gauge width={150} height={150} value={sales?.length} text={`Ksh. ${sales?.length.toFixed(2)}`} startAngle={-135} endAngle={135} cornerRadius="50%" />
-            <p style={{ width: '100%', textAlign: 'center' }}>Total amount from sales.</p>
-          </Card>
-        </Col>
-        <Col style={{ margin: '20px 0 0 0' }} >
-          <Card hoverable onClick={() => setIsModalOpen(true)}>
-            <Gauge width={150} height={150} value={sales?.length} text={`Ksh. ${sales?.length.toFixed(2)}`} startAngle={-135} endAngle={135} cornerRadius="50%" />
-            <p style={{ width: '100%', textAlign: 'center' }}>Current month revenue.</p>
-          </Card>
-        </Col>
-        <Col style={{ margin: '20px 0 0 0' }} >
-          <Card hoverable onClick={() => setIsModalOpen(true)}>
-            <Gauge width={150} height={150} value={sales?.length} text={`Ksh. ${sales?.length}`} startAngle={-135} endAngle={135} cornerRadius="50%" />
-            <p style={{ width: '100%', textAlign: 'center' }}>Total chicks sold.</p>
-          </Card>
-        </Col>
-        <Col style={{ margin: '20px 0 0 0' }} >
-          <Card hoverable onClick={() => setIsModalOpen(true)}>
-            <Gauge width={150} height={150} value={sales?.length} text={`Ksh. ${sales?.length}`} startAngle={-135} endAngle={135} cornerRadius="100%" />
-            <p style={{ width: '100%', textAlign: 'center' }}>Current month chicks sales.</p>
-          </Card>
-        </Col>
+      <DatePicker onChange={onChange} placeholder={year || 'Select year'} style={{ width: '30%' }} picker="year" />
+      <div style={{ width: '100%', display: 'flex', flexWrap: 'wrap' }}>
+
+        <div style={{ width: '50%' }}>
+          <p>Hatch and Unhatched Chicks.</p>
+          <BarChart
+            style={{ padding: '16px' }}
+            dataset={transformedData}
+            xAxis={[{ scaleType: 'band', dataKey: 'month', label: `Months (${year})` }]}
+            series={[
+              { dataKey: 'quantitySold', label: 'Total Chicks Sold' },
+            ]}
+            {...chartSetting}
+          />
+        </div>
+        <div style={{ width: '50%' }}>
+          <p>Revenue From Sold Chicks Over Time.</p>
+          <BarChart
+            style={{ padding: '16px' }}
+            dataset={transformedData}
+            xAxis={[{ scaleType: 'band', dataKey: 'month', label: `Months (${year})` }]}
+            series={[
+              { dataKey: 'totalAmount', label: 'Total Chicks Revenue' },
+            ]}
+            {...chartSetting}
+          />
+        </div>
       </div>
+      
     </>
   )
 }
 
 export default Admin_SalesDashboard;
-
-// I need to add the total revenue from sales. Allowing for filtered/categorised into date options.
-// I need to get a comparison of the eggs recieved vs the eggs sold within a bracket of period.

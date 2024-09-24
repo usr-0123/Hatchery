@@ -9,7 +9,7 @@ import { filterObjectByValues } from '../../../../helpers/editObjectProperties.j
 
 const user = decodeToken();
 
-const Hatchery_Records = ({ batch }) => {
+const Hatchery_Records = () => {
     const [form] = Form.useForm();
     const [hatchRecords, setHatchRecords] = useState();
     const { data: hatchRecordsData, refetch: refetchHatchRecords, isLoading: loadingHatchRecords } = useFetchHatchRecordsQuery();

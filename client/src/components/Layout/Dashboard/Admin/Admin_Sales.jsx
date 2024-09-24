@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react'
+
 import { Modal, Table } from 'antd';
 
 import { useFetchSaleQuery } from '../../../../features/apis/salesApis.js';
 import { convertDateToUIFormat } from '../../../../helpers/dateConversion.js';
+import { formatToMoney } from '../../../../helpers/priceDisplayConversion.js';
 
 const Admin_Sales = () => {
     const [sales, setSales] = useState([]);
@@ -18,10 +20,10 @@ const Admin_Sales = () => {
             key: 'saleDate',
             render: (saleDate) => convertDateToUIFormat(saleDate)
         }, {
-            title: 'Chick Price',
-            dataIndex: 'chickPrice',
-            key: 'chickPrice',
-            render: (chickPrice) => `Ksh. ${chickPrice.toFixed(2)}`
+            title: 'Chick Price (Ksh.)',
+            dataIndex: 'price',
+            key: 'price',
+            render: (price) => formatToMoney(price)
         }, {
             title: 'Quantity Sold',
             dataIndex: 'quantitySold',
@@ -30,12 +32,12 @@ const Admin_Sales = () => {
             title: 'Total Ammount (Ksh.)',
             dataIndex: 'totalAmount',
             key: 'totalAmount',
-            render: (totalAmount) => `Ksh. ${totalAmount.toFixed(2)}`
+            render: (totalAmount) => formatToMoney(totalAmount)
         }
     ];
 
-    const handleSelect = (saleId) => {
-        setSelectedId(saleId);
+    const handleSelect = (record) => {
+        setSelectedId(record);
         setIsModalOpen(true);
     };
 
@@ -50,7 +52,7 @@ const Admin_Sales = () => {
 
     return (
         <>
-            <Table title={() => 'Chicks Sales Records'} onRow={(record) => ({ onClick: () => handleSelect(record.saleId) })} key='saleId' columns={columns} dataSource={sales} pagination={{ pageSize: 5 }} />
+            <Table title={() => 'Chicks Sales Records'} onRow={(record) => ({ onClick: () => handleSelect(record) })} key='saleId' columns={columns} dataSource={sales} pagination={{ pageSize: 5 }} />
             <Modal
                 title="Sale Details Modal"
                 key="salesModal"
@@ -59,7 +61,7 @@ const Admin_Sales = () => {
                 onOk={() => setIsModalOpen(false)}
                 onCancel={() => setIsModalOpen(false)}
                 width={700}
-            >{selectedId || 'N/A'}</Modal>
+            >{selectedId?.saleId || 'N/A'}</Modal>
         </>
     )
 }

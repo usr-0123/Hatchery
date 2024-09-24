@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Layout, Menu, theme } from 'antd';
+import { Button, Layout, Menu, Modal, theme } from 'antd';
 import { Content, Footer, Header } from 'antd/es/layout/layout.js';
 import { LogoutOutlined, MenuFoldOutlined, MenuOutlined, UserOutlined } from '@ant-design/icons';
 
@@ -21,6 +21,7 @@ const Dashboard = () => {
   const [role, setRole] = useState(null);
   const [userDetails, setUserDetails] = useState(null);
   const [login, setLogin] = useState(false);
+  const [logoutModal, setLogoutModal] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -111,7 +112,7 @@ const Dashboard = () => {
             {userDetails ? userDetails.userEmail : <UserOutlined />}
           </p>
 
-          <LogoutOutlined onClick={() => handleLogout()} />
+          <LogoutOutlined onClick={() => setLogoutModal(true)} />
         </div>
       </Header>
 
@@ -169,6 +170,20 @@ const Dashboard = () => {
           </Content>
         </Layout>
       </Content>
+
+      <Modal
+      title='Logout Confirmation'
+        onCancel={() => setLogoutModal(false)}
+        onClose={() => setLogoutModal(false)}
+        onOk={handleLogout}
+        open={logoutModal}
+        okText='Logout'
+        centered
+        okButtonProps={{danger: true}}
+      >
+        <p>Confirm logout?</p>
+      </Modal>
+
       <Footer
         style={{
           display: 'flex',

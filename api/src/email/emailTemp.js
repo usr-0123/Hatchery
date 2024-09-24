@@ -1,5 +1,6 @@
 import nodemailer from 'nodemailer';
 import dotenv from 'dotenv';
+import { logger } from '../utilis/logger.js';
 
 dotenv.config();
 
@@ -362,12 +363,13 @@ export const sendMail = async (params) => {
         subject: subject(),
         html: temp(),
     };
-
+    
     try {
         logger.info("Sending email...");
         let info = await transporter.sendMail(mailOptions);
         return { info };
     } catch (error) {
+        
         return { error };
     };
 };
