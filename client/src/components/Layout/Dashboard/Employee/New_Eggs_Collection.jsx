@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 
 import { useCreateBatchMutation } from '../../../../features/apis/batchApis.js';
 import { interceptor } from '../../../../services/Interceptor.js';
+import { batchStatus } from '../../../../helpers/globalStrings.js';
 
 const New_Eggs_Collection = ({ usersArray }) => {
     const [selectedUserId, setSelectedUserId] = useState(null);
@@ -35,8 +36,7 @@ const New_Eggs_Collection = ({ usersArray }) => {
 
     const onFinish = async (values) => {
         const receivedDate = new Date();
-        const batchStatus = 'recieved';
-        const response = interceptor({ params: await createBatch({ ...values, receivedDate, batchStatus }), type: 'Mutation' });
+        const response = interceptor({ params: await createBatch({ ...values, receivedDate, batchStatus:batchStatus.recieved.value }), type: 'Mutation' });
         if (response) {
             form.resetFields();
         };

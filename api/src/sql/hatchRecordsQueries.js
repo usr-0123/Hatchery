@@ -1,5 +1,5 @@
-export const createNewHatchRecordQuery = `INSERT INTO tbl_Hatchrecords (hatchRecordId, batchId, hatchedChicks, unHatchedEggs, dateHatched)
-VALUES (@hatchRecordId, @batchId, @hatchedChicks, @unHatchedEggs, @dateHatched)`;
+export const createNewHatchRecordQuery = `INSERT INTO tbl_Hatchrecords (hatchRecordId, hatchedChicks, unHatchedEggs, dateHatched)
+VALUES (@hatchRecordId, @hatchedChicks, @unHatchedEggs, @dateHatched)`;
 
 export const fetchHatchRecordsQuery = `SELECT * FROM tbl_Hatchrecords `;
 

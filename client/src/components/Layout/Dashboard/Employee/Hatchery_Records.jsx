@@ -11,7 +11,9 @@ const user = decodeToken();
 
 const Hatchery_Records = () => {
     const [form] = Form.useForm();
+    
     const [hatchRecords, setHatchRecords] = useState();
+
     const { data: hatchRecordsData, refetch: refetchHatchRecords, isLoading: loadingHatchRecords } = useFetchHatchRecordsQuery();
 
     const [updateHatch, { isLoading: updatingHatchRecords }] = useUpdateHatchRecordsMutation();
@@ -61,6 +63,7 @@ const Hatchery_Records = () => {
 
     const handleEdit = async (params) => {
         const notNull = filterObjectByValues(params);
+
         const response = interceptor({ params: await updateHatch({ editorId: user?.userId, hatchRecordId: selectedObject?.hatchRecordId, editedValues: notNull }), type: 'Mutation' })
         if (response) {
             form.resetFields();

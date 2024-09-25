@@ -6,19 +6,11 @@ import { createNewHatchRecordService, deleteHatchRecordService, fetchHatchRecord
 export const createNewHatchRecordController = async (req, res) => {
 
     try {
-        const { batchId, hatchedChicks, unHatchedEggs, dateHatched } = req.body;
-
-        const hatchRecordExists = await fetchHatchRecordsService();
-
-        const exactHatchRecord = hatchRecordExists.recordset.length > 0 && hatchRecordExists.recordset.filter(object => object.batchId === batchId && object.dateHatched === dateHatched);
-
-        if (exactHatchRecord.length > 0) {
-            return conflict(res, 'This hatch record already exists.');
-        };
+        const { hatchedChicks, unHatchedEggs, dateHatched } = req.body;
 
         const hatchRecordId = v4();
 
-        const hatchRecord = { hatchRecordId, batchId, hatchedChicks, unHatchedEggs, dateHatched };
+        const hatchRecord = { hatchRecordId, hatchedChicks, unHatchedEggs, dateHatched };
 
         const result = await createNewHatchRecordService(hatchRecord);
 

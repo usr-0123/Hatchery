@@ -23,6 +23,11 @@ const columns = [
     }, {
         title: 'Incubation State',
         dataIndex: 'incubationState',
+        showSorterTooltip: {
+            target: 'full-header',
+        },
+        filters: incubationOptions,
+        onFilter: (value, record) => record?.incubationState?.indexOf(value) === 0,
         key: 'incubationState',
     }, {
         title: 'Hatch Date',
@@ -68,9 +73,9 @@ const IncubationRecords = () => {
                 };
 
                 if (hatch) {
-                    const result = { params: await newHatchRecord(hatch), type: 'Mutation' };
+                    const result = interceptor({ params: await newHatchRecord(hatch), type: 'Mutation' });
 
-                    if (result) {
+                    if (result && user?.userId && selectedObject?.incubationId) {
                         const incubationResponse = interceptor({ params: await editIncubation({ editorId: user?.userId, incubationId: selectedObject.incubationId, editedValues: { IncubationState: 'Hatched' } }), type: 'Mutation' });
                         if (incubationResponse) {
                             form.resetFields();
@@ -113,9 +118,8 @@ const IncubationRecords = () => {
 
     useEffect(() => {
         if (incubationData?.data) {
-            const ongoingIncubations = incubationData?.data.filter(object => object.incubationState === 'Ongoing');
-            if (ongoingIncubations.length > 0) {
-                setIncubationArray(ongoingIncubations);
+            if (incubationData?.data.length > 0) {
+                setIncubationArray(incubationData?.data);
             } else {
                 setIncubationArray([]);
             };
@@ -137,6 +141,9 @@ const IncubationRecords = () => {
                 dataSource={incubationArray}
                 pagination={{ pageSize: 5 }}
                 rowKey="IncubationId"
+                showSorterTooltip={{
+                    target: 'filter-icon',
+                }}
             />
 
             <Modal

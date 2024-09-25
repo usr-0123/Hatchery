@@ -6,10 +6,12 @@ import Admin_Users from '../components/Layout/Dashboard/Admin/Admin_Users.jsx';
 import Admin_Products from '../components/Layout/Dashboard/Admin/Admin_Products.jsx';
 import Admin_Sales from '../components/Layout/Dashboard/Admin/Admin_Sales.jsx';
 import AdminProductionDashboard from '../components/Page/Admin/AdminProductionDashboard.jsx';
+import NotifyHatch from '../components/NotifyHatch.jsx';
 
 const Admin_Dashboard = () => {
   return (
     <div>
+      <NotifyHatch />
       <Routes>
         <Route index element={<Admin_Home />} />
         <Route path='/admin-home' element={<Admin_Home />} />

@@ -60,20 +60,20 @@ CREATE TABLE tbl_Incubation
     incubationState VARCHAR(255) DEFAULT 'Ongoing' -- Options are ongoing (default) or completed.
 );
 
+select * from tbl_Incubation
+
 drop table tbl_incubation
 
 -- the batch info to be removed
 CREATE TABLE tbl_Hatchrecords
 (
     hatchRecordId VARCHAR(255) PRIMARY KEY,
-    batchId VARCHAR(255),
     hatchedChicks INT,
     unHatchedEggs INT,
-    dateHatched DATE,
-    FOREIGN KEY (batchId) REFERENCES tbl_Batches(batchId)
-    ON UPDATE CASCADE
-    ON DELETE CASCADE 
+    dateHatched DATE
 );
+
+select * from tbl_hatchrecords;
 
 drop table tbl_Hatchrecords;
 

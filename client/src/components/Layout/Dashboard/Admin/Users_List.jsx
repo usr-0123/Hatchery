@@ -47,10 +47,10 @@ const Users_List = ({ users, refetch }) => {
   };
 
   const onFinish = async (values) => {
-    if (user && selectedQId) {
-      const response = await interceptor({
-        params: update({
-          editorId: user.userId,
+    if (user?.userId && selectedQId) {
+      const response = interceptor({
+        params: await update({
+          editorId: user?.userId,
           userId: selectedQId,
           editedValues: values
         }),
@@ -59,6 +59,7 @@ const Users_List = ({ users, refetch }) => {
 
       if (response) {
         setEditUser(false);
+        setIsModalOpen(false);
         refetch();
         form.resetFields();
       }
@@ -66,10 +67,10 @@ const Users_List = ({ users, refetch }) => {
   };
 
   const handleDelete = async () => {
-    if (selectedQId && user) {
-      const response = await interceptor({
-        params: del({
-          editorId: user.userId,
+    if (selectedQId && user?.userId) {
+      const response = interceptor({
+        params: await del({
+          editorId: user?.userId,
           userId: selectedQId
         }),
         type: 'Mutation'

@@ -16,17 +16,29 @@ export const userRoles = {
     }
 };
 
+export const batchStatus = {
+    recieved: {
+        key: 'recieved',
+        name: 'Recieved',
+        value: 'Recieved'
+    }
+};
+
 export const incubationOptions = [
     {
         value: null,
+        text: 'None',
         label: 'Select...'
     }, {
+        text: 'Ongoing',
         value: 'Ongoing',
         label: 'Ongoing'
     }, {
+        text: 'Hatched',
         value: 'Hatched',
         label: 'Hatched'
     }, {
+        text: 'Spoilt',
         value: 'Spoilt',
         label: 'Spoilt'
     },

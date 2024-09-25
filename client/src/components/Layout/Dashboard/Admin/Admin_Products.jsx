@@ -5,11 +5,12 @@ import { convertDateToUIFormat } from '../../../../helpers/dateConversion.js';
 import { useCreateNewProductPriceMutation, useDeleteProductPriceMutation, useFetchProductPricesQuery, useUpdateProductPriceMutation } from '../../../../features/apis/productPriceApis.js';
 import { decodeToken } from '../../../../helpers/token.js';
 import { interceptor } from '../../../../services/Interceptor.js';
+import NewProductForm from './NewProductForm.jsx';
 
 const Admin_Products = () => {
   const [productPrices, setProductPrices] = useState([]);
-  const [productPrice, setProductPrice] = useState({});
   const [selectedId, setSelectedId] = useState(null);
+  const [selectedObject, setSelectedObject] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [edit, setEdit] = useState(false);
   const [newProduct, setNewProduct] = useState(false);
@@ -17,21 +18,11 @@ const Admin_Products = () => {
 
   const { data: productPricesData, refetch: refetchProductPrices, isLoading: fetchingProducstPrices } = useFetchProductPricesQuery();
 
-  const [create, { isLoading: creatingNewProduct }] = useCreateNewProductPriceMutation();
-
   const [update, { isLoading: updating }] = useUpdateProductPriceMutation();
 
   const [del, { isLoading: isDeleting }] = useDeleteProductPriceMutation();
 
   const user = decodeToken();
-
-  const productPriceObject = productPrices?.length > 0 && productPrices?.filter(object => object.productPriceId === selectedId);
-
-  useEffect(() => {
-    if (productPriceObject.length > 0) {
-      setProductPrice(productPriceObject[0]);
-    };
-  }, [productPriceObject])
 
   useEffect(() => {
     if (productPricesData?.data) {
@@ -64,24 +55,14 @@ const Admin_Products = () => {
     }
   ];
 
-  const handleCreateProduct = async (values) => {
-
-    const response = interceptor({ params: await create(values), type: 'Mutation' });
-
-    if (response) {
-      form.resetFields();
-      refetchProductPrices();
-      setNewProduct(false);
-    };
-
-  };
-
-  const handleSelect = (productPriceId) => {
-    setSelectedId(productPriceId);
+  const handleSelect = (value) => {
+    setSelectedObject(value)
+    setSelectedId(value?.productPriceId);
     setIsModalOpen(true);
   };
 
   const handleEditSubmit = async (values) => {
+
     let updateDate = new Date();
 
     const response = interceptor({ params: await update({ editorId: user?.userId, productPriceId: selectedId, editedValues: { date_updated: updateDate, ...values } }), type: 'Mutation' });
@@ -90,6 +71,7 @@ const Admin_Products = () => {
       form.resetFields();
       refetchProductPrices();
       setEdit(false);
+      setIsModalOpen(false);
     };
   };
 
@@ -107,48 +89,12 @@ const Admin_Products = () => {
 
   return (
     <>
-      <Table style={{ display: newProduct ? 'none' : 'contents' }} title={() => 'Products Price Rates'} onRow={(record) => ({ onClick: () => handleSelect(record.productPriceId) })} key='productPriceId' columns={columns} dataSource={productPrices} pagination={{ pageSize: 5 }} />
-      <Button type='primary' onClick={() => setNewProduct(!newProduct)} >{!newProduct ? 'Add Product' : 'Close form'}</Button>
+      <Table style={{ display: newProduct ? 'none' : 'contents' }} title={() => 'Products Price Rates'} onRow={(record) => ({ onClick: () => handleSelect(record) })} key='productPriceId' columns={columns} dataSource={productPrices} pagination={{ pageSize: 5 }} />
 
-      <div style={{ width: '50%', margin: '0 20%' }}>
-        <Form
-          form={form}
-          key='newProductForm'
-          layout="vertical"
-          style={{ display: newProduct ? 'contents' : 'none' }}
-          onFinish={handleCreateProduct}
-        >
-          <Form.Item
-            label="Product"
-            name="product_name"
-            rules={[{ required: true, message: 'Please enter the product name' }]}
-          >
-            <Input />
-          </Form.Item>
-
-          <Form.Item
-            label="Price"
-            name="price"
-            rules={[{ required: true, message: 'Please enter the price' }]}
-          >
-            <InputNumber
-              min={0}
-              style={{ width: '100%' }}
-            />
-          </Form.Item>
-
-          <Form.Item
-            label="Currency"
-            name="currency"
-            rules={[{ required: true, message: 'Please select the currency' }]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item>
-            <Button key="submitEdit" htmlType="submit" type='primary' disabled={creatingNewProduct} loading={creatingNewProduct} >Submit</Button>
-          </Form.Item>
-        </Form>
+      <div style={{ display: newProduct ? 'contents' : 'none' }} >
+        <NewProductForm refetchProductPrices={refetchProductPrices} setNewProduct={setNewProduct} />
       </div>
+      <Button type='primary' onClick={() => setNewProduct(!newProduct)} >{!newProduct ? 'Add Product' : 'Close form'}</Button>
 
       <Modal
         title="Product Price Details"
@@ -159,8 +105,8 @@ const Admin_Products = () => {
         onCancel={() => setIsModalOpen(false)}
         width={700}
         footer={[
-          <Button key="delete" danger type='primary' onClick={handleDelete} loading={isDeleting}>Delete</Button>,
-          <Button type='primary' key="edit" onClick={() => setEdit(!edit)} > {edit ? 'Cancel Edit' : 'Edit'} </Button>,
+          <Button key="edit" onClick={() => setEdit(!edit)} > {edit ? 'Cancel Edit' : 'Edit'} </Button>,
+          <Button key="delete" danger onClick={handleDelete} loading={isDeleting}>Delete</Button>,
         ]}
       >
         <Form
@@ -168,28 +114,22 @@ const Admin_Products = () => {
           key='editDetailsForm'
           style={{ display: !edit ? 'none' : 'contents' }}
           layout="vertical"
-          initialValues={{
-            product_name: productPrice.product_name,
-            price: productPrice.price,
-            currency: productPrice.currency,
-          }}
           onFinish={handleEditSubmit}
         >
           <Form.Item
             label="Product"
             name="product_name"
-            rules={[{ required: true, message: 'Please enter the product name' }]}
           >
-            <Input />
+            <Input placeholder={selectedObject?.product_name || 'Enter new product name.'} />
           </Form.Item>
 
           <Form.Item
             label="Price"
             name="price"
-            rules={[{ required: true, message: 'Please enter the price' }]}
           >
             <InputNumber
               min={0}
+              placeholder={selectedObject?.price || 'Enter new product price'}
               style={{ width: '100%' }}
             />
           </Form.Item>
@@ -197,9 +137,8 @@ const Admin_Products = () => {
           <Form.Item
             label="Currency"
             name="currency"
-            rules={[{ required: true, message: 'Please select the currency' }]}
           >
-            <Input />
+            <Input placeholder={selectedObject?.currency} />
           </Form.Item>
           <Form.Item>
             <Button key="submitEdit" htmlType="submit" type='primary' disabled={updating} loading={updating} >Update</Button>
@@ -208,10 +147,10 @@ const Admin_Products = () => {
 
         <Descriptions style={{ display: edit ? 'none' : 'contents' }} bordered column={2}>
 
-          <Descriptions.Item label="Product"> {productPrice.product_name || 'N/A'} </Descriptions.Item>
-          <Descriptions.Item label="Price"> {productPrice.price || 'N/A'} </Descriptions.Item>
-          <Descriptions.Item label="Currency"> {productPrice.currency || 'N/A'} </Descriptions.Item>
-          <Descriptions.Item label="Last Update"> {convertDateToUIFormat(productPrice.date_updated) || 'N/A'} </Descriptions.Item>
+          <Descriptions.Item label="Product"> {selectedObject?.product_name || 'N/A'} </Descriptions.Item>
+          <Descriptions.Item label="Price"> {selectedObject?.price || 'N/A'} </Descriptions.Item>
+          <Descriptions.Item label="Currency"> {selectedObject?.currency || 'N/A'} </Descriptions.Item>
+          <Descriptions.Item label="Last Update"> {convertDateToUIFormat(selectedObject?.date_updated) || 'N/A'} </Descriptions.Item>
 
         </Descriptions>
       </Modal>

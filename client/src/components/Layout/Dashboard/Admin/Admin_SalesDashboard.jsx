@@ -3,15 +3,13 @@ import React, { useEffect, useState } from 'react'
 import { BarChart } from '@mui/x-charts/BarChart';
 import { axisClasses } from '@mui/x-charts/ChartsAxis';
 
-import { Button, DatePicker } from 'antd';
+import { DatePicker } from 'antd';
 
-import { DownloadOutlined } from '@ant-design/icons';
 
 import { formatSalesDataByMonth } from '../../../../helpers/eggsCount.js';
 
-const Admin_SalesDashboard = ({ batch, recieved, sales, hatchRecords }) => {
+const Admin_SalesDashboard = ({ sales }) => {
   const [year, setYear] = useState(2024);
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const onChange = (date, dateString) => {
     const selectedYear = parseInt(dateString, 10);

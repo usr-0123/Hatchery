@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Card, Col, Modal, Row, Statistic } from 'antd';
 
-const Admin_Chicks = ({ batch, recieved, hatched, incubation }) => {
+const Admin_Chicks = ({ hatched }) => {
     const [totalChicks, setTotalChicks] = useState();
     const [isModalOpen, setIsModalOpen] = useState(false);
 

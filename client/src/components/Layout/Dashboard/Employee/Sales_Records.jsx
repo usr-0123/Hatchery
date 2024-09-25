@@ -61,12 +61,14 @@ const Sales_Records = () => {
 
     const handleEdit = async (values) => {
         const editValues = filterObjectByValues(values);
-        const response = interceptor({ params: await updateSale({ editorId: user?.userId, saleId: selectedObject.saleId, editValues }), type: 'Mutation' })
-        if (response) {
-            form.resetFields();
-            setEditModalOpen(false);
-            refetchSales();
-            setIsModalOpen(false);
+        if (selectedObject?.saleId && user?.userId) {
+            const response = interceptor({ params: await updateSale({ editorId: user?.userId, saleId: selectedObject?.saleId, editValues }), type: 'Mutation' })
+            if (response) {
+                form.resetFields();
+                setEditModalOpen(false);
+                refetchSales();
+                setIsModalOpen(false);
+            };
         };
     };
 
@@ -114,6 +116,7 @@ const Sales_Records = () => {
                     <Descriptions.Item label='Total' >{selectedObject?.totalAmount ? formatToMoney(selectedObject.totalAmount) : '0.00'}</Descriptions.Item>
                 </Descriptions>
             </Modal>
+
             <Modal
                 key='editSaleModal'
                 title='Edit sale record.'
@@ -163,6 +166,7 @@ const Sales_Records = () => {
                     </Form.Item>
                 </Form>
             </Modal>
+
             <Modal
                 title='Confirm delete?'
                 open={isDeleteModalOpen}

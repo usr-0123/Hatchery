@@ -6,6 +6,7 @@ import { useDeletebatchMutation, useFetchJointBatchesQuery, useUpdateBatchMutati
 import { interceptor } from '../../../../services/Interceptor.js';
 import { decodeToken } from '../../../../helpers/token.js';
 import { filterObjectByValues } from '../../../../helpers/editObjectProperties.js';
+import { batchStatus } from '../../../../helpers/globalStrings.js';
 
 const user = decodeToken();
 
@@ -15,16 +16,17 @@ const Collected_Eggs = ({ usersArray }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isEditModal, setIsEditModal] = useState(false);
     const [isDeleteModal, setIsDeleteModal] = useState(false);
-
+    const [form] = Form.useForm();
+    
     const { data: batchData, refetch: refetchBatches, isLoading: fetchingBatches } = useFetchJointBatchesQuery();
     
     const [updateBatch, { isLoading: updatingBatch, }] = useUpdateBatchMutation();
-
+    
     const [deleteBatch, { isLoading: deletingBatch }] = useDeletebatchMutation();
-
+    
     useEffect(() => {
         if (batchData?.data) {
-            const recievedBatch = batchData.data.filter(object => object?.batchStatus === 'recieved');
+            const recievedBatch = batchData.data.filter(object => object?.batchStatus === batchStatus.recieved.value);
 
             if (recievedBatch.length > 0) {
                 setEggsData(recievedBatch);
@@ -105,6 +107,7 @@ const Collected_Eggs = ({ usersArray }) => {
             const response = interceptor({ params: await updateBatch({ editorId: user?.userId, batchId: selectedObject.batchId, editedValues: filtered }), type: 'Mutation' });
 
             if (response) {
+                form.resetFields()
                 setIsEditModal(false);
                 refetchBatches();
                 setIsModalOpen(false);
@@ -149,12 +152,16 @@ const Collected_Eggs = ({ usersArray }) => {
             <Modal
                 open={isEditModal}
                 centered
-                onOk={(details) => onFinish(details)}
+                onOk={() => form.submit()}
+                okButtonProps={{ loading: updatingBatch, disabled: updatingBatch, htmlType: 'submit' }}
                 onCancel={() => setIsEditModal(false)}
+                okText='Update'
+
             >
                 <Form
                     onFinish={onFinish}
                     layout='vertical'
+                    form={form}
                 >
                     <Form.Item
                         name='userId'
@@ -192,11 +199,6 @@ const Collected_Eggs = ({ usersArray }) => {
                         />
                     </Form.Item>
 
-                    <Form.Item
-                        style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                    >
-                        <Button type='primary' loading={updatingBatch} htmlType='submit' > Submit </Button>
-                    </Form.Item>
                 </Form>
             </Modal>
 
