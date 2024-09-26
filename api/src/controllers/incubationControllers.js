@@ -6,11 +6,11 @@ import { createNewIncubationService, deleteIncubationService, fetchIncubationsSe
 export const createNewIncubationController = async (req, res) => {
 
     try {
-        const { startDate, hatchDate, totalEggs, IncubationState } = req.body;
+        const { startDate, totalEggs } = req.body;
 
         const incubationExists = await fetchIncubationsService();
 
-        const exactIncubation = incubationExists.recordset.length > 0 && incubationExists.recordset.filter(object => object.startDate === startDate && object.hatchDate === hatchDate && object.totalEggs === totalEggs && object.IncubationState === IncubationState);
+        const exactIncubation = incubationExists.recordset.length > 0 && incubationExists.recordset.filter(object => object.startDate === startDate && object.totalEggs === totalEggs && object.IncubationState === IncubationState);
 
         if (exactIncubation.length > 0) {
             return conflict(res, 'This incubation record already exists.');
@@ -18,7 +18,13 @@ export const createNewIncubationController = async (req, res) => {
 
         const incubationId = v4();
 
-        const incubation = { incubationId, startDate, hatchDate, totalEggs, IncubationState: IncubationState ? IncubationState : 'Ongoing' };
+        const startDateObj = new Date(startDate);
+        const hatchDateObj = new Date(startDateObj);
+        hatchDateObj.setDate(hatchDateObj.getDate() + 21);
+
+        const hatchDate = hatchDateObj.toISOString().split('T')[0];
+
+        const incubation = { incubationId, startDate, hatchDate, totalEggs };
 
         const result = await createNewIncubationService(incubation);
 
@@ -83,11 +89,13 @@ export const updateincubationController = async (req, res) => {
 
     let permission = false;
 
-    const editor = await fetchUsersService({ userId: req.params.editorId });
+    if (req?.params?.editorId) {
+        const editor = await fetchUsersService({ userId: req.params.editorId });
 
-    if (editor?.recordset?.length > 0 && editor.recordset[0].userRole === 'Admin' || editor.recordset[0].userRole === 'Employee') {
-        permission = true;
-    };
+        if (editor?.recordset?.length > 0 && editor.recordset[0].userRole === 'Admin' || editor.recordset[0].userRole === 'Employee') {
+            permission = true;
+        };
+    }
 
     const availableEntry = await fetchIncubationsService(req.params);
 

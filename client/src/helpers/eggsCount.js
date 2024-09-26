@@ -1,3 +1,5 @@
+import { batchStatus } from "./globalStrings";
+
 export function getTotalEggsForCurrentMonth(batches) {
     /**
      * Sum up the totalEggs
@@ -30,7 +32,12 @@ export function getTotalEggsAllTime(batches) {
 
 export function sumReceivedEggsBatch(batchArray) {
     return batchArray
-        .filter(batch => batch.batchStatus === 'recieved')
+        .filter(batch => batch.batchStatus === batchStatus.recieved.value)
+        .reduce((sum, batch) => sum + batch.totalEggs, 0);
+};
+
+export function sumConsumedEggsBatch(eggsArray) {
+    return eggsArray
         .reduce((sum, batch) => sum + batch.totalEggs, 0);
 };
 

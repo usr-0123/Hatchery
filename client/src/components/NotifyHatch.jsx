@@ -6,7 +6,7 @@ const { Text, Link } = Typography;
 import './NotifyHatch.css';
 
 const NotifyHatch = () => {
-    const [message, setMessage] = useState();
+    const [message, setMessage] = useState('');
     const [incubationRecords, setIncubationRecords] = useState([]);
     const [hatchRecords, setHatchRecords] = useState([]);
 

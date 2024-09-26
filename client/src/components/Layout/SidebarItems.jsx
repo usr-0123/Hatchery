@@ -12,13 +12,13 @@ export let adminSideBarItems = [
     { key: 'production', label: 'Production', path: '/dashboard/admin/admin-production', icon: <ExperimentOutlined /> },
     { key: 'sales', label: 'Sales', path: '/dashboard/admin/admin-Sales', icon: <LineChartOutlined /> },
     { key: 'users', label: 'Users', path: '/dashboard/admin/admin-users', icon: <UsergroupDeleteOutlined /> },
-    { key: 'adminProfile', label: 'Profile', path: '/dashboard/admin', icon: <UserOutlined /> },
+    { key: 'adminProfile', label: 'Profile', path: '/dashboard/admin/admin-profile', icon: <UserOutlined /> },
 ];
 
 export let employeeSideBarItems = [
     { key: 'employeeHome', label: 'Home', path: '/dashboard/employee/employee-home', icon: <HomeOutlined /> },
     { key: 'employeeIncubation', label: 'Incubation', path: '/dashboard/employee/employee-incubation', icon: <ClockCircleOutlined /> },
     { key: 'employeeHatchery', label: 'Hatchery', path: '/dashboard/employee/employee-hatchery', icon: <CheckCircleOutlined /> },
-    { key: 'employeeales', label: 'Sales', path: '/dashboard/employee/employee-sales', icon: <LineChartOutlined /> },
-    { key: 'adminProfile', label: 'Profile', path: '/dashboard/employee', icon: <UserOutlined /> },
+    { key: 'employeeSales', label: 'Sales', path: '/dashboard/employee/employee-sales', icon: <LineChartOutlined /> },
+    { key: 'employeeProfile', label: 'Profiles', path: '/dashboard/employee/employee-profile', icon: <UserOutlined /> },
 ];

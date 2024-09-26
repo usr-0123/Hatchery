@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { Button, DatePicker, Form, InputNumber } from 'antd';
 
@@ -8,7 +8,7 @@ import { interceptor } from '../../../../services/Interceptor.js';
 import { useCreateIncubationMutation } from '../../../../features/apis/incubationApis.js';
 import { filterObjectByValues } from '../../../../helpers/editObjectProperties.js';
 
-const New_Incubation = () => {
+const New_Incubation = ({totalEggs}) => {
 
     const [form] = Form.useForm();
 
@@ -21,8 +21,15 @@ const New_Incubation = () => {
 
         if (response) {
             form.resetFields();
+            refetchbatches();
         };
     };
+
+    // fetch all batches and get the count and set it into a state
+
+    // also deduct the incubated eggs
+
+    // sumReceivedEggsBatch(batchArray)
 
     return (
         <div style={{ display: 'flex', alignContent: 'center', justifyContent: 'center', width: '100%', gap: '2%' }}>
@@ -38,12 +45,30 @@ const New_Incubation = () => {
                 <Form.Item
                     name='totalEggs'
                     label='Total Eggs'
-                    rules={[{
-                        required: true,
-                        message: 'Please enter the number of eggs.'
-                    }]}
+                    rules={[
+                        {
+                            required: true,
+                            validator: (_, value) => {
+                                if (!value) {
+                                    return Promise.reject(new Error('Please enter number of eggs.'))
+                                }
+
+                                if (value < 1) {
+                                    return Promise.reject(new Error('The least number of eggs to incubate is 1.'));
+                                }
+
+                                if (value > totalEggs) {
+                                    return Promise.reject(new Error(`There is ${totalEggs} eggs available.`));
+                                }
+
+                                return Promise.resolve();
+                            },
+                        },]}
                 >
-                    <InputNumber min={1} style={{ width: '100%' }} placeholder='Number of eggs.' />
+                    <InputNumber
+                        style={{ width: '100%' }}
+                        placeholder='Number of eggs.'
+                    />
                 </Form.Item>
                 <Form.Item
                     name='startDate'

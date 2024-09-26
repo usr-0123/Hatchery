@@ -7,6 +7,7 @@ import Admin_Products from '../components/Layout/Dashboard/Admin/Admin_Products.
 import Admin_Sales from '../components/Layout/Dashboard/Admin/Admin_Sales.jsx';
 import AdminProductionDashboard from '../components/Page/Admin/AdminProductionDashboard.jsx';
 import NotifyHatch from '../components/NotifyHatch.jsx';
+import Profile from '../pages/Profile.jsx';
 
 const Admin_Dashboard = () => {
   return (
@@ -19,6 +20,7 @@ const Admin_Dashboard = () => {
         <Route path='/admin-production' element={<AdminProductionDashboard />} />
         <Route path='/admin-Sales' element={<Admin_Sales />} />
         <Route path='/admin-users' element={<Admin_Users />} />
+        <Route path='/admin-profile' element={<Profile />} />
       </Routes>
     </div>
   );

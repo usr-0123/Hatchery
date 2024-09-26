@@ -39,6 +39,7 @@ const New_Eggs_Collection = ({ usersArray }) => {
         const response = interceptor({ params: await createBatch({ ...values, receivedDate, batchStatus:batchStatus.recieved.value }), type: 'Mutation' });
         if (response) {
             form.resetFields();
+            setSelectedUserId(null);
         };
 
     };

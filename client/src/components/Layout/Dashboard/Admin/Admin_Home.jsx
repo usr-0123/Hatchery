@@ -1,8 +1,6 @@
 import { Modal, Tabs, Button } from 'antd';
 import React, { useEffect, useState } from 'react'
 
-import Admin_Eggs from './Admin_Eggs.jsx';
-import Admin_Chicks from './Admin_Chicks.jsx';
 import Admin_SalesDashboard from './Admin_SalesDashboard.jsx';
 import Admin_HomeDashboard from './Admin_HomeDashboard.jsx';
 import { useFetchJointBatchesQuery } from '../../../../features/apis/batchApis.js';
@@ -10,8 +8,8 @@ import { useFetchSaleQuery } from '../../../../features/apis/salesApis.js';
 import { useFetchHatchRecordsQuery } from '../../../../features/apis/hatchRecordsApis.js';
 
 import { DownloadOutlined } from '@ant-design/icons';
-import { generatePDF } from '../../../../helpers/pdf.js';
 import { useFetchIncubationQuery } from '../../../../features/apis/incubationApis.js';
+import DownloadRecords from '../../../DownloadRecords.jsx';
 
 const Admin_Home = () => {
   const [batchArray, setBatchArray] = useState([]);
@@ -82,14 +80,6 @@ const Admin_Home = () => {
       key: 'admin-sales',
       label: 'Sales Records',
       children: <Admin_SalesDashboard sales={salesArray} />,
-    }, {
-      key: 'admin-eggs',
-      label: 'Eggs Records',
-      children: <Admin_Eggs batch={batchArray} recieved={recievedBatch} incubation={incubationArray} />,
-    }, {
-      key: 'all-chicks',
-      label: 'Chicks Records',
-      children: <Admin_Chicks hatched={hatchArray} />,
     }
   ];
 
@@ -101,12 +91,11 @@ const Admin_Home = () => {
         open={downloadModal}
         centered
         onCancel={() => setDownloadModal(false)}
-        onOk={() => generatePDF({ farmerRecords: recievedBatch, incubationRecords: incubationArray, hatchRecords: hatchArray })}
-        okText='Download'
-        okButtonProps={{ icon: <DownloadOutlined /> }}
+        okButtonProps={{ style: { display: 'none' } }}
       >
+        <DownloadRecords salesArray={salesArray} recievedBatch={recievedBatch} incubationArray={incubationArray} hatchArray={hatchArray} />
       </Modal>
-      <Button type="primary" icon={<DownloadOutlined />} onClick={() => setDownloadModal(true)} size={'large'}>Download Sales Report</Button>
+      <Button type="primary" icon={<DownloadOutlined />} onClick={() => setDownloadModal(true)} size={'large'}>Download Report</Button>
     </>
   )
 }

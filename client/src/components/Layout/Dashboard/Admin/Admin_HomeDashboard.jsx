@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Card, Col, DatePicker, Statistic } from 'antd';
-import { Gauge, gaugeClasses } from '@mui/x-charts/Gauge';
+import { DatePicker } from 'antd';
 
 import { BarChart } from '@mui/x-charts/BarChart';
 import { axisClasses } from '@mui/x-charts/ChartsAxis';
@@ -49,9 +48,9 @@ const Admin_HomeDashboard = ({ batch, recieved, sales, hatchRecords }) => {
 
   return (
     <>
-      <DatePicker onChange={onChange} placeholder={year || 'Select year'} style={{width: '30%'}} picker="year" />
-      <div style={{ width: '100%', display: 'flex', flexWrap: 'wrap' }}>
-        <div style={{ width: '50%' }}>
+      <DatePicker onChange={onChange} placeholder={year || 'Select year'} style={{ width: '30%' }} picker="year" />
+      <div style={{ width: '100%', display: 'flex', flexWrap: 'wrap', gap: '10%' }}>
+        <div style={{ width: '45%' }}>
           <p>Hatch and Unhatched Chicks.</p>
           <BarChart
             style={{ padding: '16px' }}
@@ -65,7 +64,7 @@ const Admin_HomeDashboard = ({ batch, recieved, sales, hatchRecords }) => {
           />
         </div>
 
-        <div style={{ width: '50%' }}>
+        <div style={{ width: '45%' }}>
           <p>Hatch and Unhatched Chicks.</p>
           <BarChart
             style={{ padding: '16px' }}

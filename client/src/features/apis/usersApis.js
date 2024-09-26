@@ -85,7 +85,7 @@ export const usersApi = createApi({
         }),
 
         deleteUser: builder.mutation({
-            query: ({editorId, userId}) => ({
+            query: ({ editorId, userId }) => ({
                 url: `/user/delete/${editorId}/${userId}`,
                 method: 'DELETE',
             }),
@@ -95,4 +95,17 @@ export const usersApi = createApi({
     }),
 });
 
-export const { useRegisterUserMutation, useAuthenticateUserMutation, useGetAllUsersQuery, useGetUserByPhoneNumberQuery, useGetUserByUserNameQuery, useGetUserByEmailQuery, useGetUserByUserIdQuery, useGetUserByMembershipDateQuery, useGetUserByLocationQuery, useGetUserByStreetQuery, useUpdateUserDetailsMutation, useDeleteUserMutation } = usersApi;
+export const {
+    useRegisterUserMutation,
+    useAuthenticateUserMutation,
+    useGetAllUsersQuery,
+    useGetUserByPhoneNumberQuery,
+    useGetUserByUserNameQuery,
+    useGetUserByEmailQuery,
+    useGetUserByUserIdQuery,
+    useGetUserByMembershipDateQuery,
+    useGetUserByLocationQuery,
+    useGetUserByStreetQuery,
+    useUpdateUserDetailsMutation,
+    useDeleteUserMutation
+} = usersApi;

@@ -39,7 +39,7 @@ const columns = [
 
 const user = decodeToken();
 
-const IncubationRecords = () => {
+const IncubationRecords = ({ totalEggs }) => {
 
     const [incubationArray, setIncubationArray] = useState([]);
 
@@ -60,6 +60,7 @@ const IncubationRecords = () => {
     const [form] = Form.useForm();
 
     const handleEdit = async (value) => {
+
         const notNull = filterObjectByValues(value);
 
         if (incubationState && incubationState === "Hatched") {
@@ -76,7 +77,7 @@ const IncubationRecords = () => {
                     const result = interceptor({ params: await newHatchRecord(hatch), type: 'Mutation' });
 
                     if (result && user?.userId && selectedObject?.incubationId) {
-                        const incubationResponse = interceptor({ params: await editIncubation({ editorId: user?.userId, incubationId: selectedObject.incubationId, editedValues: { IncubationState: 'Hatched' } }), type: 'Mutation' });
+                        const incubationResponse = interceptor({ params: await editIncubation({ editorId: user?.userId, incubationId: selectedObject.incubationId, editedValues: { incubationState: 'Hatched' } }), type: 'Mutation' });
                         if (incubationResponse) {
                             form.resetFields();
                             setEditIsModalOpen(false);
@@ -88,8 +89,7 @@ const IncubationRecords = () => {
             };
 
         } else {
-
-            if (selectedObject.incubationId) {
+            if (user?.userId && selectedObject?.incubationId && notNull) {
                 const response = interceptor({ params: await editIncubation({ editorId: user?.userId, incubationId: selectedObject.incubationId, editedValues: notNull }), type: 'Mutation' });
                 if (response) {
                     form.resetFields();
@@ -129,6 +129,12 @@ const IncubationRecords = () => {
         };
 
     }, [incubationData, refetchincubations]);
+
+    useEffect(() => {
+        if (selectedObject?.incubationState) {
+            setIncubationState(selectedObject?.incubationState)
+        };
+    }, [selectedObject]);
 
     return (
         <>
@@ -211,10 +217,29 @@ const IncubationRecords = () => {
                         label={incubationState && incubationState === "Hatched" ? 'Hatched Chicks' : 'Total Eggs'}
                         rules={[{
                             required: incubationState && incubationState === 'Hatched',
-                            message: 'Number of hatched chicks required'
+                            validator: (rule, value) => {
+                                if (!value && rule?.required) {
+                                    return Promise.reject(new Error(incubationState && incubationState === "Hatched" ? 'Number of hatched chicks required' : 'Please enter number of eggs.'))
+                                }
+
+                                if (incubationState && incubationState !== "Hatched" && value && value < 1) {
+
+                                    return Promise.reject(new Error('The least number of eggs to incubate is 1.'));
+                                }
+
+                                if (incubationState && incubationState !== "Hatched" && value > selectedObject?.totalEggs && value > totalEggs) {
+                                    return Promise.reject(new Error(`There is ${totalEggs} eggs available.`));
+                                }
+
+                                if (incubationState && incubationState === "Hatched" && value > selectedObject?.totalEggs) {
+                                    return Promise.reject(new Error(`There is ${selectedObject?.totalEggs} eggs available.`));
+                                }
+
+                                return Promise.resolve();
+                            },
                         }]}
                     >
-                        <InputNumber max={selectedObject?.totalEggs} placeholder={incubationState && incubationState === 'Hatched' ? 'Enter the number of hatched chicks.' : selectedObject?.totalEggs || 'Enter number of eggs.'} style={{ width: '100%' }} />
+                        <InputNumber placeholder={incubationState && incubationState === 'Hatched' ? 'Enter the number of hatched chicks.' : selectedObject?.totalEggs || 'Enter number of eggs.'} style={{ width: '100%' }} />
                     </Form.Item>
                 </Form>
             </Modal>

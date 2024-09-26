@@ -1,50 +1,45 @@
-import { Tabs } from 'antd';
 import React, { useEffect, useState } from 'react'
+import { Tabs } from 'antd';
 
 import New_Incubation from '../../Layout/Dashboard/Employee/New_Incubation.jsx';
-
-import { useGetAllUsersQuery } from '../../../features/apis/usersApis.js';
-import { useFetchJointBatchesQuery } from '../../../features/apis/batchApis.js';
 import IncubationRecords from '../../Layout/Dashboard/Employee/IncubationRecords.jsx';
+import { useFetchbatchesQuery } from '../../../features/apis/batchApis.js';
+import { useFetchIncubationQuery } from '../../../features/apis/incubationApis.js';
+import { sumConsumedEggsBatch, sumReceivedEggsBatch } from '../../../helpers/eggsCount.js';
 
 const Employee_Incubation = () => {
-  const [usersArray, setUsersArray] = useState([]);
-  const [batchesData, setBatchesData] = useState([]);
-
-  const { data: usersData, refetch: refetchUser } = useGetAllUsersQuery();
-
-  useEffect(() => {
-    if (usersData?.data) {
-      const farmers = usersData.data.filter(object => object.userRole === 'User');
-
-      setUsersArray(farmers);
-
-    } else {
-      setUsersArray([]);
-      refetchUser();
-    }
-  }, [usersData]);
-
-  const { data: batchData, refetch: refetchBatches, isLoading: fetchingBatches } = useFetchJointBatchesQuery();
+  const [totalEggs, setTotalEggs] = useState(0);
+  const { data: batcheArray, refetch: refetchbatches } = useFetchbatchesQuery();
+  const { data: incubationArray, refetch: refetchIncubations } = useFetchIncubationQuery();
 
   useEffect(() => {
-    if (batchData?.data) {
-      setBatchesData(batchData.data);
+    if (batcheArray?.data && incubationArray?.data) {
+      const boughtEggs = sumReceivedEggsBatch(batcheArray?.data);
+      const usedEggs = sumConsumedEggsBatch(incubationArray?.data);
+
+      const eggs = +boughtEggs - +usedEggs;
+
+      if (eggs > 0) {
+        setTotalEggs(eggs);
+      } else {
+        setTotalEggs(0);
+      };
     } else {
-      setBatchesData([]);
-      refetchBatches();
-    }
-  }, [batchData, refetchBatches]);
+      setTotalEggs(0);
+      refetchbatches();
+      refetchIncubations();
+    };
+  }, [batcheArray, incubationArray, refetchbatches, refetchIncubations]);
 
   const tabItems = [
     {
       key: 'employee-general-tab',
       label: 'New Incubation',
-      children: <New_Incubation />,
+      children: <New_Incubation totalEggs={totalEggs} />,
     }, {
       key: 'employee-incubations',
       label: 'Incubation Records',
-      children: <IncubationRecords />,
+      children: <IncubationRecords totalEggs={totalEggs} />,
     }
   ];
 
