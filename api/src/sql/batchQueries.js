@@ -1,5 +1,5 @@
-export const createNewBatchQuery = `INSERT INTO tbl_batches (batchId, userId, receivedDate, totalEggs, batchStatus)
-VALUES (@batchId, @userId, @receivedDate, @totalEggs, @batchStatus)`;
+export const createNewBatchQuery = `INSERT INTO tbl_batches (batchId, userId, receivedDate, totalEggs, totalPrice, batchStatus)
+VALUES (@batchId, @userId, @receivedDate, @totalEggs, @totalPrice, @batchStatus)`;
 
 export const fetchBatchQuery = `SELECT * FROM tbl_batches `;
 
@@ -12,13 +12,10 @@ export const batchJoinQuery = `SELECT
     u.userPhoneNumber, 
     u.userLocation, 
     u.membershipDate,
-    b.batchId, 
-    b.receivedDate, 
-    b.totalEggs, 
-    b.batchStatus
+    b.*
 FROM tbl_Users u
 JOIN tbl_Batches b
-    ON u.userId = b.userId;
+    ON u.userId = b.userId
 `
 
 export const updateBatchQuery = (batchId, params) => {

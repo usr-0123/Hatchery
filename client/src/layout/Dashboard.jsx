@@ -193,7 +193,7 @@ const Dashboard = () => {
           height: '1vh'
         }}
       >
-        Hatchery ©{new Date().getFullYear()} Created by Luwi
+        Hatchery ©{new Date().getFullYear()} Created by Keith
       </Footer>
     </Layout>
   )

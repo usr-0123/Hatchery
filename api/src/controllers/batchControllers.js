@@ -2,11 +2,17 @@ import { v4 } from "uuid";
 import { createNewBatchService, deleteBatchService, fetchBatchesService, fetchUJBatchesService, updateBatchService } from "../services/batchService.js";
 import { conflict, dataFound, sendBadRequest, sendCreated, sendDeleteSuccess, sendNotFound, sendServerError, unAuthorized } from "../helpers/httpStatusCodes.js";
 import { fetchUsersService } from "../services/usersServices.js";
-import { convertDateToISO, convertToSimpleDate } from "../helpers/helperFunctions.js";
+import { convertToSimpleDate } from "../helpers/helperFunctions.js";
+import { newBatchValidator } from "../validators/batchValidators.js";
 
 export const createNewBatchController = async (req, res) => {
     try {
-        const { userId, receivedDate, totalEggs, batchStatus } = req.body;
+        const validation = newBatchValidator(req.body);
+        if (validation.error) {
+            return sendServerError(res, validation.error.message);
+        };
+
+        const { userId, receivedDate, totalEggs, price, batchStatus } = req.body;
 
         const batchExists = await fetchBatchesService();
 
@@ -18,14 +24,17 @@ export const createNewBatchController = async (req, res) => {
 
         const batchId = v4();
 
+        const totalPrice = +totalEggs * +price
+
         const batch = {
             batchId,
             userId,
             receivedDate,
             totalEggs,
+            totalPrice,
             batchStatus
         };
-
+        
         const result = await createNewBatchService(batch);
 
         if (result.message) {
@@ -106,7 +115,7 @@ export const fetchUJBatchController = async (req, res) => {
 };
 
 export const fetchUJBatchesController = async (req, res) => {
-    
+
     try {
         const result = await fetchUJBatchesService();
 

@@ -42,7 +42,7 @@ export const hatchApi = createApi({
         }),
 
         fetchHatchRecordsByDateHatched: builder.query({
-            query: () => `/hatchRecord/fetch/dateHatched/${dateHatched}`,
+            query: (dateHatched) => `/hatchRecord/fetch/dateHatched/${dateHatched}`,
             providesTags: ['HatchRecord'],
         }),
 

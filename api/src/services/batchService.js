@@ -8,6 +8,7 @@ export const createNewBatchService = async (batch) => {
             .input('userId', sql.VarChar, batch.userId)
             .input('receivedDate', sql.Date, batch.receivedDate)
             .input('totalEggs', sql.Int, batch.totalEggs)
+            .input('totalPrice', sql.Decimal, batch.totalPrice)
             .input('batchStatus', sql.VarChar, batch.batchStatus)
             .query(createNewBatchQuery);
 

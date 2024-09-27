@@ -1,10 +1,24 @@
 import React, { useState } from 'react';
-import { Button, Select, Space } from 'antd';
+import { Button, DatePicker, Select, Space } from 'antd';
 import { generatePDF } from '../helpers/pdf.js';
 import { DownloadOutlined } from '@ant-design/icons';
+import { calculateProfits } from '../helpers/sales.js';
 
 const DownloadRecords = ({ salesArray, recievedBatch, incubationArray, hatchArray }) => {
     const [selection, setSelection] = useState([]);
+    const [selectedMonth, setSelectedMonth] = useState(null);
+
+    const handleDateChange = (value) => {
+        
+        if (value) {
+            const formattedMonth = value.format('M-YYYY');
+            setSelectedMonth(formattedMonth);
+        } else {
+            setSelectedMonth(null);
+        }
+    };
+
+    const reportForSeptember = calculateProfits(recievedBatch, salesArray, selectedMonth);
 
     const options = [
         {
@@ -23,6 +37,11 @@ const DownloadRecords = ({ salesArray, recievedBatch, incubationArray, hatchArra
             label: 'Sales Reports.',
             value: 'salesArray',
         },
+        {
+            label: 'Profits Reports.',
+            value: 'reportForSeptember',
+            children: <DatePicker />
+        },
     ];
 
     const handleChange = (value) => {
@@ -30,21 +49,21 @@ const DownloadRecords = ({ salesArray, recievedBatch, incubationArray, hatchArra
     };
 
     const handleDownload = () => {
-        // Map selected values to their corresponding arrays
         const selectedData = {
             recievedBatch,
             incubationArray,
             hatchArray,
             salesArray,
+            reportForSeptember,
         };
 
-        // Filter the selected arrays based on the current selection
         const filteredData = selection.reduce((acc, key) => {
             if (selectedData[key]) {
                 acc[key] = selectedData[key];
             }
             return acc;
         }, {});
+
 
         generatePDF(filteredData);
     };
@@ -65,7 +84,8 @@ const DownloadRecords = ({ salesArray, recievedBatch, incubationArray, hatchArra
                     </Space>
                 )}
             />
-            <Button style={{ margin: '10px' }} type="primary" disabled={selection?.length < 1} icon={<DownloadOutlined />} onClick={handleDownload} >Download</Button>
+            <DatePicker placeholder='Select reports month' style={{ width: '40%' }} onChange={handleDateChange} />
+            <Button style={{ margin: '10px', width: '40%' }} type="primary" disabled={selection?.length < 1} icon={<DownloadOutlined />} onClick={handleDownload} >Download</Button>
         </>
     )
 }

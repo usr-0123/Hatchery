@@ -4,10 +4,13 @@ import React, { useEffect, useState } from 'react'
 import { useCreateBatchMutation } from '../../../../features/apis/batchApis.js';
 import { interceptor } from '../../../../services/Interceptor.js';
 import { batchStatus } from '../../../../helpers/globalStrings.js';
+import { useFetchProductPricesQuery } from '../../../../features/apis/productPriceApis.js';
 
 const New_Eggs_Collection = ({ usersArray }) => {
     const [selectedUserId, setSelectedUserId] = useState(null);
     const [selectedUser, setSelectedUser] = useState(null);
+    const [product, setProduct] = useState([]);
+    const { data: productsArray, refetch: refetchProductsArray } = useFetchProductPricesQuery();
 
     useEffect(() => {
         if (selectedUserId && usersArray.length > 0) {
@@ -23,11 +26,27 @@ const New_Eggs_Collection = ({ usersArray }) => {
             setSelectedUser();
         };
 
-    }, [selectedUserId, usersArray]);
+        if (productsArray?.data) {
+            if (productsArray?.data.length > 0) {
+                setProduct(productsArray?.data);
+            } else {
+                setProduct();
+            };
+        } else {
+            setProduct();
+            refetchProductsArray();
+        };
+
+    }, [selectedUserId, productsArray, usersArray, refetchProductsArray]);
 
     const options = usersArray?.map((object) => ({
         value: object.userId,
         label: `${object.firstName} ${object.lastName} - ${object.userEmail}`,
+    }));
+
+    const productsOptions = product?.map((object) => ({
+        value: object.price,
+        label: `${object.product_name}`,
     }));
 
     const [createBatch, { isLoading: creatingBatch }] = useCreateBatchMutation();
@@ -35,13 +54,13 @@ const New_Eggs_Collection = ({ usersArray }) => {
     const [form] = Form.useForm();
 
     const onFinish = async (values) => {
+        
         const receivedDate = new Date();
-        const response = interceptor({ params: await createBatch({ ...values, receivedDate, batchStatus:batchStatus.recieved.value }), type: 'Mutation' });
+        const response = interceptor({ params: await createBatch({ ...values, receivedDate, batchStatus: batchStatus.recieved.value }), type: 'Mutation' });
         if (response) {
             form.resetFields();
             setSelectedUserId(null);
         };
-
     };
 
     return (
@@ -50,8 +69,10 @@ const New_Eggs_Collection = ({ usersArray }) => {
                 onFinish={onFinish}
                 form={form}
                 style={{ width: '40%' }}
+                layout='vertical'
             >
                 <Form.Item
+                    label='Farmer'
                     name='userId'
                     rules={[{
                         required: true,
@@ -61,7 +82,18 @@ const New_Eggs_Collection = ({ usersArray }) => {
                     <Select onChange={(id) => setSelectedUserId(id)} style={{ width: '100%' }} options={options} defaultValue='Select User' />
                 </Form.Item>
                 <Form.Item
+                    name='price'
+                    label='Product Price'
+                    rules={[{
+                        required: true,
+                        message: 'Please select a product.'
+                    }]}
+                >
+                    <Select style={{ width: '100%' }} options={productsOptions} defaultValue='Select Product.' />
+                </Form.Item>
+                <Form.Item
                     name='totalEggs'
+                    label='Number of Eggs'
                     rules={[{
                         required: true,
                         message: 'Please enter the number of collected eggs..'

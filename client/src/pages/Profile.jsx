@@ -38,7 +38,6 @@ const Profile = () => {
     }, [userData, refetch, form]);
 
     const handleSubmit = async (values) => {
-        console.log(values);
 
         if (user?.userId && user?.userId && values) {
 

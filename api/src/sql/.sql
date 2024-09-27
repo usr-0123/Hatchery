@@ -16,15 +16,14 @@ CREATE TABLE tbl_Users
 
 SELECT * from tbl_Users
 
-drop table tbl_Users;
-
 CREATE TABLE tbl_Batches
 (
     batchId VARCHAR(255) PRIMARY KEY,
     userId VARCHAR(255),
     receivedDate DATE,
-    totalEggs INT, -- Total eggs received in the batch
-    batchStatus VARCHAR(255), -- incubation, hatched, sold
+    totalEggs INT,
+    totalPrice DECIMAL(10, 2) NOT NULL,
+    batchStatus VARCHAR(255),
     FOREIGN KEY (userId) REFERENCES tbl_Users(userId)
     ON UPDATE CASCADE
     ON DELETE CASCADE 
@@ -113,7 +112,7 @@ CREATE TABLE tbl_Sales
     totalAmount DECIMAL(10, 2),
 );
 
-drop table tbl_sales;
+select * FROM tbl_sales;
 
 
 -- We have farmers and hatchery cooperative society

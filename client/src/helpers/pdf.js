@@ -2,8 +2,9 @@ import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 
 import { convertDateToUIFormat } from './dateConversion.js';
+import { formatToMoney } from './priceDisplayConversion.js';
 
-export const generatePDF = ({ recievedBatch, incubationArray, hatchArray, salesArray }) => {
+export const generatePDF = ({ recievedBatch, incubationArray, hatchArray, salesArray, reportForSeptember }) => {
 
     const doc = new jsPDF();
 
@@ -13,13 +14,14 @@ export const generatePDF = ({ recievedBatch, incubationArray, hatchArray, salesA
     {
         recievedBatch && recievedBatch.length > 0 && doc.text('Farmer Collection Records', 12, 35);
         recievedBatch && recievedBatch.length > 0 && doc.autoTable({
-            head: [['First Name', 'Last Name', 'Email', 'Received Date', 'Total Eggs', 'Batch Status']],
+            head: [['First Name', 'Last Name', 'Email', 'Received Date', 'Total Eggs', 'Total Amount', 'Batch Status']],
             body: recievedBatch.map(record => [
                 record.firstName,
                 record.lastName,
                 record.userEmail,
                 new Date(record.receivedDate).toLocaleDateString(),
                 record.totalEggs,
+                record.totalPrice,
                 record.batchStatus,
             ]),
             startY: 40
@@ -63,6 +65,22 @@ export const generatePDF = ({ recievedBatch, incubationArray, hatchArray, salesA
                 record.price,
                 record.totalAmount,
             ]),
+            startY: doc.lastAutoTable.finalY + 16 || 40
+        });
+    }
+
+    {
+        reportForSeptember && doc.text('Profits Reports', 14, doc.lastAutoTable.finalY + 10 || 35);
+        reportForSeptember && doc.autoTable({
+            head: [['Period', 'Total Eggs Bought', 'Total Eggs Buying Price', 'Quantity of Sold Chicks', 'Total Chicks Sold Amount','Profit/Loss']],
+            body: [[
+                reportForSeptember?.selectedPeriod,
+                reportForSeptember?.totalEggs,
+                formatToMoney(reportForSeptember?.totalPrice),
+                reportForSeptember?.quantitySold,
+                formatToMoney(reportForSeptember?.totalAmount),
+                reportForSeptember?.salesProfit
+            ]],
             startY: doc.lastAutoTable.finalY + 16 || 40
         });
     }

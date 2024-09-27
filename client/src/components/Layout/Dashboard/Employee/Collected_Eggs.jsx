@@ -17,13 +17,13 @@ const Collected_Eggs = ({ usersArray }) => {
     const [isEditModal, setIsEditModal] = useState(false);
     const [isDeleteModal, setIsDeleteModal] = useState(false);
     const [form] = Form.useForm();
-    
+
     const { data: batchData, refetch: refetchBatches, isLoading: fetchingBatches } = useFetchJointBatchesQuery();
-    
+
     const [updateBatch, { isLoading: updatingBatch, }] = useUpdateBatchMutation();
-    
+
     const [deleteBatch, { isLoading: deletingBatch }] = useDeletebatchMutation();
-    
+
     useEffect(() => {
         if (batchData?.data) {
             const recievedBatch = batchData.data.filter(object => object?.batchStatus === batchStatus.recieved.value);
@@ -79,6 +79,10 @@ const Collected_Eggs = ({ usersArray }) => {
             title: 'Total Eggs',
             dataIndex: 'totalEggs',
             key: 'totalEggs',
+        }, {
+            title: 'Total Price',
+            dataIndex: 'totalPrice',
+            key: 'totalPrice',
         }, {
             title: 'Location',
             dataIndex: 'userLocation',

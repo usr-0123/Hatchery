@@ -60,7 +60,7 @@ const Admin_Home = () => {
 
   useEffect(() => {
     if (batchArray.length > 0) {
-      const recieved = batchArray.filter(object => object.batchStatus === 'recieved' || object.batchStatus === 'received');
+      const recieved = batchArray.filter(object => object.batchStatus === 'Recieved');
 
       if (recieved.length > 0) {
         setRecievedBatch(recieved);
