@@ -106,7 +106,7 @@ const Collected_Eggs = ({ usersArray }) => {
 
     const onFinish = async (values) => {
         const filtered = filterObjectByValues(values)
-        if (selectedObject?.batchId && user) {
+        if (selectedObject?.batchId && user?.userId) {
 
             const response = interceptor({ params: await updateBatch({ editorId: user?.userId, batchId: selectedObject.batchId, editedValues: filtered }), type: 'Mutation' });
 
@@ -156,13 +156,11 @@ const Collected_Eggs = ({ usersArray }) => {
             <Modal
                 open={isEditModal}
                 centered
-                onOk={() => form.submit()}
-                okButtonProps={{ loading: updatingBatch, disabled: updatingBatch, htmlType: 'submit' }}
+                okButtonProps={{ disabled: true, style: { display: 'none' } }}
                 onCancel={() => setIsEditModal(false)}
-                okText='Update'
-
             >
                 <Form
+                    key='editBatchRecordsForm'
                     onFinish={onFinish}
                     layout='vertical'
                     form={form}
@@ -201,6 +199,9 @@ const Collected_Eggs = ({ usersArray }) => {
                             style={{ width: '100%' }}
                             placeholder={selectedObject ? selectedObject.batchStatus || 0 : 'Select Status'}
                         />
+                    </Form.Item>
+                    <Form.Item>
+                        <Button htmlType='submit' loading={updatingBatch} disabled={updatingBatch} >Update</Button>
                     </Form.Item>
 
                 </Form>

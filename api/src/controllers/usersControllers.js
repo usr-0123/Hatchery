@@ -304,7 +304,7 @@ export const updateUserDetailsController = async (req, res) => {
         if (permission) {
             try {
                 const result = await updateUserService(req.params, req.body);
-
+                
                 if (result.rowsAffected > 0) {
 
                     const mailOptions = {

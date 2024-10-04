@@ -3,7 +3,7 @@ import { UserOutlined, HomeOutlined, UsergroupDeleteOutlined, ProductOutlined, L
 
 export let farmerSidebarItems = [
     { key: 'farmerHome', label: 'Home', path: '/dashboard/farmer/farmer-home', icon: <HomeOutlined /> },
-    { key: 'userProfile', label: 'Profile', path: '/dashboard/farmer', icon: <UserOutlined /> },
+    { key: 'userProfile', label: 'Profile', path: '/dashboard/farmer/farmer-profile', icon: <UserOutlined /> },
 ];
 
 export let adminSideBarItems = [

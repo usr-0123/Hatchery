@@ -11,7 +11,7 @@ const user = decodeToken();
 
 const Hatchery_Records = () => {
     const [form] = Form.useForm();
-    
+
     const [hatchRecords, setHatchRecords] = useState();
 
     const { data: hatchRecordsData, refetch: refetchHatchRecords, isLoading: loadingHatchRecords } = useFetchHatchRecordsQuery();
@@ -63,14 +63,16 @@ const Hatchery_Records = () => {
 
     const handleEdit = async (params) => {
         const notNull = filterObjectByValues(params);
-
-        const response = interceptor({ params: await updateHatch({ editorId: user?.userId, hatchRecordId: selectedObject?.hatchRecordId, editedValues: notNull }), type: 'Mutation' })
-        if (response) {
-            form.resetFields();
-            setEditModalOpen(false);
-            refetchHatchRecords();
-            setIsModalOpen(false);
+        if (selectedObject?.hatchRecordId && user?.userId) {
+            const response = interceptor({ params: await updateHatch({ editorId: user?.userId, hatchRecordId: selectedObject?.hatchRecordId, editedValues: notNull }), type: 'Mutation' })
+            if (response) {
+                form.resetFields();
+                setEditModalOpen(false);
+                refetchHatchRecords();
+                setIsModalOpen(false);
+            };
         };
+
     };
 
     const onDelete = async () => {
@@ -127,7 +129,7 @@ const Hatchery_Records = () => {
                 onCancel={() => setEditModalOpen(false)}
                 centered
                 onOk={() => form.submit()}
-                okButtonProps={{ disabled: updatingHatchRecords, loading: updatingHatchRecords, htmlType: 'submit' }}
+                okButtonProps={{ disabled: true, style: { display: 'none' } }}
                 okText='Update'
             >
                 <Form
@@ -155,6 +157,10 @@ const Hatchery_Records = () => {
                             key='hatchedChicksEditInput'
                             style={{ width: '100%' }}
                         />
+                    </Form.Item>
+
+                    <Form.Item>
+                        <Button htmlType='submit' disabled={updatingHatchRecords} loading={updatingHatchRecords} >Update</Button>
                     </Form.Item>
 
                 </Form>

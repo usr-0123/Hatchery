@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import dayjs from 'dayjs';
 import { Avatar, Typography, Divider, Form, Input, Button, message, DatePicker, Select, Descriptions } from "antd";
 import { UserOutlined } from '@ant-design/icons';
 import { decodeToken } from "../helpers/token";
@@ -7,21 +6,12 @@ import { useGetUserByUserIdQuery, useUpdateUserDetailsMutation } from "../featur
 import { convertDateToUIFormat } from "../helpers/dateConversion.js";
 import { interceptor } from "../services/Interceptor.js";
 
-const { Title, Text } = Typography;
-
-const genderOptions = [
-    { label: 'Male', value: 0 },
-    { label: 'Female', value: 1 }
-];
+const { Title } = Typography;
 
 const Profile = () => {
     const [user, setUser] = useState({});
     const [edit, setEdit] = useState(false);
     const [form] = Form.useForm();
-
-    const disabledDate = (current) => {
-        return current && current > dayjs().endOf('day');
-    };
 
     const data = decodeToken();
 
@@ -131,11 +121,11 @@ const Profile = () => {
                     <Input placeholder={user?.userPhoneNumber || 'Enter your phone number.'} style={{ width: '100%' }} />
                 </Form.Item>
                 <Form.Item
-                    name="street"
+                    name="userStreet"
                     label="Street"
                     style={{ width: '47%' }}
                 >
-                    <Input placeholder={user?.street || 'Enter street details.'} style={{ width: '100%' }} />
+                    <Input placeholder={user?.userStreet || 'Enter street details.'} style={{ width: '100%' }} />
                 </Form.Item>
                 <Form.Item
                     name="userLocation"

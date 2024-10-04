@@ -124,9 +124,7 @@ const Sales_Records = () => {
                 open={editModalOpen}
                 onCancel={() => setEditModalOpen(false)}
                 centered
-                onOk={() => form.submit()}
-                okButtonProps={{ disabled: updatingSale, loading: updatingSale, htmlType: 'submit' }}
-                okText='Update'
+                okButtonProps={{ disabled: true, style: { display: 'none' } }}
             >
                 <Form
                     onFinish={handleEdit}
@@ -163,6 +161,10 @@ const Sales_Records = () => {
                             key='priceEditInput'
                             style={{ width: '100%' }}
                         />
+                    </Form.Item>
+
+                    <Form.Item>
+                        <Button htmlType='submit' disabled={updatingSale} loading={updatingSale}>Update</Button>
                     </Form.Item>
                 </Form>
             </Modal>

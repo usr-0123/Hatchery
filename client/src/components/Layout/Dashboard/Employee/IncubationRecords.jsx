@@ -180,9 +180,7 @@ const IncubationRecords = ({ totalEggs }) => {
                 open={isEditModalOpen && selectedObject}
                 onCancel={() => setEditIsModalOpen(false)}
                 centered
-                onOk={form.submit}
-                okButtonProps={{ disabled: editingIncubation || creatingHatch, loading: editingIncubation || creatingHatch }}
-                okText='Update'
+                okButtonProps={{ disabled: true, style: {display: 'none'} }}
             >
                 <Form
                     form={form}
@@ -241,8 +239,13 @@ const IncubationRecords = ({ totalEggs }) => {
                     >
                         <InputNumber placeholder={incubationState && incubationState === 'Hatched' ? 'Enter the number of hatched chicks.' : selectedObject?.totalEggs || 'Enter number of eggs.'} style={{ width: '100%' }} />
                     </Form.Item>
+
+
+                    <Form.Item>
+                        <Button htmlType='submit' disabled={editingIncubation || creatingHatch} loading={editingIncubation || creatingHatch} >Update</Button>
+                    </Form.Item>
                 </Form>
-            </Modal>
+            </Modal >
 
             <Modal
                 title='Confirm deleting this incubation record?'
