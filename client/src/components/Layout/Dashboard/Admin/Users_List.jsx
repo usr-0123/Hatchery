@@ -25,7 +25,6 @@ const columns = [
 ];
 
 const userRoles = [
-  { key: 'default', label: 'Select role', value: null },
   { key: 'employee', label: 'Employee', value: 'Employee' },
   { key: 'farmer', label: 'Farmer', value: 'User' },
   { key: 'admin', label: 'Admin', value: 'Admin' }
@@ -125,6 +124,7 @@ const Users_List = ({ users, refetch }) => {
 
         <Form
           onFinish={onFinish}
+          key="editUserInfoForm"
           form={form}
           style={{ width: '100%', display: editUser ? 'flex' : 'none', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}
         >
@@ -141,7 +141,7 @@ const Users_List = ({ users, refetch }) => {
             />
           </Form.Item>
           <Form.Item style={{ display: 'flex', justifyContent: 'center' }}>
-            <Button type="primary" disabled={updatingUser} loading={updatingUser} htmlType="submit">Update</Button>
+            <Button key="editUserInfoButton" type="primary" disabled={updatingUser} loading={updatingUser} htmlType="submit">Update</Button>
           </Form.Item>
         </Form>
 

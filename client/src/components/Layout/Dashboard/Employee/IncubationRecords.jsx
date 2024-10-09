@@ -242,7 +242,7 @@ const IncubationRecords = ({ totalEggs }) => {
 
 
                     <Form.Item>
-                        <Button htmlType='submit' disabled={editingIncubation || creatingHatch} loading={editingIncubation || creatingHatch} >Update</Button>
+                        <Button key="editIncubationButton" htmlType='submit' disabled={editingIncubation || creatingHatch} loading={editingIncubation || creatingHatch} >Update</Button>
                     </Form.Item>
                 </Form>
             </Modal >

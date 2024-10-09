@@ -91,7 +91,6 @@ const Collected_Eggs = ({ usersArray }) => {
     ];
 
     const batchStatusOptions = [
-        { value: null, label: 'Select status' },
         { value: 'received', label: 'Received' },
         { value: 'pending', label: 'Pending' },
         { value: 'in-progress', label: 'In Progress' },
@@ -201,7 +200,7 @@ const Collected_Eggs = ({ usersArray }) => {
                         />
                     </Form.Item>
                     <Form.Item>
-                        <Button htmlType='submit' loading={updatingBatch} disabled={updatingBatch} >Update</Button>
+                        <Button key="editBatchRecordsButton" htmlType='submit' loading={updatingBatch} disabled={updatingBatch} >Update</Button>
                     </Form.Item>
 
                 </Form>

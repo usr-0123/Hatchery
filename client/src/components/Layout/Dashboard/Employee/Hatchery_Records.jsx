@@ -135,7 +135,7 @@ const Hatchery_Records = () => {
                 <Form
                     onFinish={handleEdit}
                     form={form}
-                    key='editHatchRecord'
+                    key='editHatchRecordForm'
                     layout='vertical'
                 >
                     <Form.Item
@@ -160,7 +160,7 @@ const Hatchery_Records = () => {
                     </Form.Item>
 
                     <Form.Item>
-                        <Button htmlType='submit' disabled={updatingHatchRecords} loading={updatingHatchRecords} >Update</Button>
+                        <Button key="editHatchRecordBtn" htmlType='submit' disabled={updatingHatchRecords} loading={updatingHatchRecords} >Update</Button>
                     </Form.Item>
 
                 </Form>
